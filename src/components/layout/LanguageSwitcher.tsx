@@ -4,7 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES } from "@/lib/i18n/translations";
 
-export function LanguageSwitcher({ dropUp = true }: { dropUp?: boolean }) {
+export function LanguageSwitcher({
+  dropUp = true,
+  variant = "dark",
+}: {
+  dropUp?: boolean;
+  variant?: "dark" | "light";
+}) {
   const { lang, setLang, t, isChanging } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -26,7 +32,11 @@ export function LanguageSwitcher({ dropUp = true }: { dropUp?: boolean }) {
       <button
         onClick={() => setOpen((o) => !o)}
         disabled={isChanging}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-all disabled:opacity-60"
+        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all disabled:opacity-60 ${
+          variant === "light"
+            ? "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            : "text-slate-300 hover:bg-slate-700 hover:text-white"
+        }`}
         aria-label={t("lang.select")}
       >
         {isChanging ? (

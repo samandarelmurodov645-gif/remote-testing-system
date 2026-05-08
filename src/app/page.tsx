@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentUser, getCurrentUserRole } from "@/lib/auth";
 import { Button } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 export default async function Home() {
   const [user, role, t] = await Promise.all([
@@ -32,6 +33,7 @@ export default async function Home() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitcher variant="light" dropUp={false} />
             {!user ? (
               <Link href="/login">
                 <Button variant="primary" size="md" className="shadow-md shadow-indigo-200">
