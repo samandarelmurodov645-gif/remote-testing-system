@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { submitAttemptAction } from "@/app/student/tests/[testId]/actions";
 import { Button, Card } from "@/components/ui";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,6 +22,10 @@ export default function AttemptRunner(props: {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
+  // Synchronous guard: prevents the timer auto-submit and the manual submit
+  // button from both firing a server action in the same event-loop tick.
+  // useRef so the flag is set before React re-renders (unlike useState).
+  const submittedRef = useRef(false);
 
   const startedAtMs = useMemo(
     () => new Date(props.startedAt).getTime(),
@@ -47,18 +51,29 @@ export default function AttemptRunner(props: {
 
   useEffect(() => {
     if (remainingMs !== 0) return;
+    if (submittedRef.current) return; // already submitted — skip
+    submittedRef.current = true;
     startTransition(async () => {
       await submitAttemptAction({ attempt_id: props.attemptId, answers, expired: true });
       window.location.href = "/student/results";
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // props.attemptId and answers are intentionally captured at expiry time;
+  // submittedRef ensures this fires at most once regardless of re-renders.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remainingMs]);
 
   function submit(expired: boolean) {
+    if (submittedRef.current) return; // already submitted — skip
+    submittedRef.current = true;
     setMessage(null);
     startTransition(async () => {
       const res = await submitAttemptAction({ attempt_id: props.attemptId, answers, expired });
-      if (!res.ok) { setMessage(res.message); return; }
+      if (!res.ok) {
+        // Allow the student to retry on a transient server error.
+        submittedRef.current = false;
+        setMessage(res.message);
+        return;
+      }
       window.location.href = "/student/results";
     });
   }

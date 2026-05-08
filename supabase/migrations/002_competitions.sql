@@ -79,12 +79,13 @@ CREATE POLICY "Students insert own participation"
   TO authenticated
   WITH CHECK (student_id = auth.uid());
 
--- Students update own participation (for score)
-CREATE POLICY "Students update own participation"
+-- Score/rank updates are performed server-side via the service role only.
+-- Students must NOT be able to write score, rank, or time_taken directly.
+CREATE POLICY "Service role updates participation"
   ON competition_participants FOR UPDATE
-  TO authenticated
-  USING (student_id = auth.uid())
-  WITH CHECK (student_id = auth.uid());
+  TO service_role
+  USING (true)
+  WITH CHECK (true);
 
 -- Admins view all participations
 CREATE POLICY "Admins view all participations"

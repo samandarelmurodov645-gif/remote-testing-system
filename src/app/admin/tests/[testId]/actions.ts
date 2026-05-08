@@ -22,19 +22,11 @@ export async function addQuestionAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
 
-  const { data: existing } = await supabase
-    .from("questions")
-    .select("position")
-    .eq("test_id", parsed.data.test_id)
-    .order("position", { ascending: false })
-    .limit(1);
-
-  const nextPos = (existing?.[0]?.position ?? -1) + 1;
-
-  const { error } = await supabase.from("questions").insert({
-    test_id: parsed.data.test_id,
-    prompt: parsed.data.prompt,
-    position: nextPos,
+  // Atomic insert: the DB function acquires an advisory lock so concurrent
+  // requests for the same test cannot compute the same MAX(position).
+  const { error } = await supabase.rpc("insert_question_atomic", {
+    p_test_id: parsed.data.test_id,
+    p_prompt: parsed.data.prompt,
   });
 
   if (error)
@@ -97,19 +89,11 @@ export async function addOptionAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
 
-  const { data: existing } = await supabase
-    .from("options")
-    .select("position")
-    .eq("question_id", parsed.data.question_id)
-    .order("position", { ascending: false })
-    .limit(1);
-
-  const nextPos = (existing?.[0]?.position ?? -1) + 1;
-
-  const { error } = await supabase.from("options").insert({
-    question_id: parsed.data.question_id,
-    text: parsed.data.text,
-    position: nextPos,
+  // Atomic insert: the DB function acquires an advisory lock so concurrent
+  // requests for the same question cannot compute the same MAX(position).
+  const { error } = await supabase.rpc("insert_option_atomic", {
+    p_question_id: parsed.data.question_id,
+    p_text: parsed.data.text,
   });
 
   if (error)

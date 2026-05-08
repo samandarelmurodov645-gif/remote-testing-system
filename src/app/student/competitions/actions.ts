@@ -197,10 +197,12 @@ export async function submitCompetitionAction(formData: FormData) {
     }
   });
 
-  // Get start time from participant record
+  // Get start time from participant record.
+  // Also read completed_at so we can short-circuit if already submitted
+  // (network retry or simultaneous timer+manual submit).
   const { data: participant } = await supabase
     .from("competition_participants")
-    .select("joined_at")
+    .select("joined_at, completed_at")
     .eq("competition_id", competitionId)
     .eq("student_id", user.id)
     .single();
@@ -209,12 +211,20 @@ export async function submitCompetitionAction(formData: FormData) {
     redirect("/student/competitions?error=Not a participant");
   }
 
+  // Idempotency: a second submission (retry / race) must not overwrite the
+  // already-saved score with a larger time_taken value.
+  if (participant.completed_at) {
+    redirect(`/student/competitions/${competitionId}/results`);
+  }
+
   const timeTaken = Math.floor(
     (Date.now() - new Date(participant.joined_at).getTime()) / 1000
   );
 
-  // Update participant record
-  const { error } = await supabase
+  // Update participant record — use service role to bypass RLS.
+  // Students cannot update competition_participants directly; only the
+  // service role is permitted to write score/rank/time_taken fields.
+  const { error } = await supabaseService
     .from("competition_participants")
     .update({
       score,
@@ -232,8 +242,8 @@ export async function submitCompetitionAction(formData: FormData) {
     );
   }
 
-  // Trigger rank update (the database function will handle this)
-  await supabase.rpc("update_competition_ranks", {
+  // Trigger rank update via service role (function is SECURITY DEFINER).
+  await supabaseService.rpc("update_competition_ranks", {
     comp_id: competitionId,
   });
 

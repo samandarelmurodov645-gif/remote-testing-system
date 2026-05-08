@@ -29,7 +29,22 @@ export async function startAttemptAction(formData: FormData) {
   if (!test || !test.published)
     redirect(`/student/tests/${parsed.data.test_id}?error=not_available`);
 
-  // Enforce max_attempts
+  // Resume an existing in_progress attempt rather than creating a new one.
+  // This fixes the silent failure where repeated clicks or a mid-test
+  // navigation-away produced a second orphaned attempt.
+  const { data: inProgress } = await supabase
+    .from("attempts")
+    .select("id")
+    .eq("test_id", parsed.data.test_id)
+    .eq("student_id", userData.user.id)
+    .eq("status", "in_progress")
+    .maybeSingle();
+
+  if (inProgress) {
+    redirect(`/student/attempts/${inProgress.id}`);
+  }
+
+  // Enforce max_attempts (only count finished attempts; in_progress handled above)
   const { count } = await supabase
     .from("attempts")
     .select("id", { count: "exact", head: true })
@@ -142,6 +157,9 @@ export async function submitAttemptAction(payload: unknown) {
     if (chosen && correctOpt && chosen === correctOpt) score += 1;
   }
 
+  // Filter on status = in_progress so concurrent submits are idempotent:
+  // the second UPDATE matches 0 rows (status already changed) and returns
+  // no error, avoiding a last-writer-wins overwrite with a stale time_taken.
   const { error: updateError } = await service
     .from("attempts")
     .update({
@@ -151,7 +169,8 @@ export async function submitAttemptAction(payload: unknown) {
       answers: parsed.data.answers,
     })
     .eq("id", attempt.id)
-    .eq("student_id", userData.user.id);
+    .eq("student_id", userData.user.id)
+    .eq("status", "in_progress");
 
   if (updateError) return { ok: false as const, message: updateError.message };
 
