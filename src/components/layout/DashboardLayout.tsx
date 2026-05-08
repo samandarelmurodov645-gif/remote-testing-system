@@ -27,10 +27,21 @@ export function PageHeader({ title, description, actions }: PageHeaderProps) {
     <div className="mb-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">{title}</h1>
-          {description && <p className="mt-2 text-slate-600">{description}</p>}
+          <div className="relative inline-block">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              {title}
+            </h1>
+            <span className="absolute -bottom-1.5 left-0 w-10 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" />
+          </div>
+          {description && (
+            <p className="mt-4 text-slate-500 text-sm leading-relaxed max-w-xl">
+              {description}
+            </p>
+          )}
         </div>
-        {actions && <div className="flex items-center gap-3">{actions}</div>}
+        {actions && (
+          <div className="flex items-center gap-3 shrink-0 mt-1">{actions}</div>
+        )}
       </div>
     </div>
   );

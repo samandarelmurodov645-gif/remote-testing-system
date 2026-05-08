@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES } from "@/lib/i18n/translations";
 
 export function LanguageSwitcher() {
-  const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, t, isChanging } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -25,10 +25,15 @@ export function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
+        disabled={isChanging}
+        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-all disabled:opacity-60"
         aria-label={t("lang.select")}
       >
-        <span className="text-base">{current.flag}</span>
+        {isChanging ? (
+          <span className="w-4 h-4 border-2 border-slate-500 border-t-slate-300 rounded-full animate-spin" />
+        ) : (
+          <span className="text-base">{current.flag}</span>
+        )}
         <span className="hidden sm:inline">{current.name}</span>
         <svg
           className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`}
@@ -36,12 +41,7 @@ export function LanguageSwitcher() {
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
@@ -63,18 +63,8 @@ export function LanguageSwitcher() {
               <span className="text-base">{l.flag}</span>
               <span>{l.name}</span>
               {lang === l.code && (
-                <svg
-                  className="w-4 h-4 ml-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+                <svg className="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               )}
             </button>

@@ -39,6 +39,11 @@ const uz: TranslationMap = {
   "home.feature3.title": "Aniq taraqqiyot",
   "home.feature3.desc":
     "Yaxshilanishni kuzatish uchun tezkor natijalar va batafsil tahlil",
+  "home.goToAdmin": "Admin paneliga o'tish",
+  "home.goToStudent": "Talaba paneliga o'tish",
+  "home.stats.students": "Talabalar",
+  "home.stats.tests": "Testlar",
+  "home.stats.satisfaction": "Mamnunlik",
 
   // Common
   "common.save": "O'zgarishlarni saqlash",
@@ -395,6 +400,11 @@ const en: TranslationMap = {
   "home.feature3.title": "Precise Progress",
   "home.feature3.desc":
     "Instant results and detailed analytics to track your improvement",
+  "home.goToAdmin": "Go to Admin Panel",
+  "home.goToStudent": "Go to Student Panel",
+  "home.stats.students": "Students",
+  "home.stats.tests": "Tests",
+  "home.stats.satisfaction": "Satisfaction",
 
   "common.save": "Save Changes",
   "common.cancel": "Cancel",
@@ -728,6 +738,11 @@ const ru: TranslationMap = {
     "Таймер в реальном времени и отслеживание прогресса",
   "home.feature3.title": "Точный прогресс",
   "home.feature3.desc": "Мгновенные результаты и подробная аналитика",
+  "home.goToAdmin": "Перейти в панель администратора",
+  "home.goToStudent": "Перейти в панель студента",
+  "home.stats.students": "Студентов",
+  "home.stats.tests": "Тестов",
+  "home.stats.satisfaction": "Удовлетворённость",
 
   "common.save": "Сохранить изменения",
   "common.cancel": "Отмена",
@@ -1059,6 +1074,11 @@ const fr: TranslationMap = {
   "home.feature2.desc": "Minuterie en temps réel et suivi des progrès",
   "home.feature3.title": "Progrès précis",
   "home.feature3.desc": "Résultats instantanés et analyses détaillées",
+  "home.goToAdmin": "Aller au panneau d'administration",
+  "home.goToStudent": "Aller au panneau étudiant",
+  "home.stats.students": "Étudiants",
+  "home.stats.tests": "Tests",
+  "home.stats.satisfaction": "Satisfaction",
 
   "common.save": "Enregistrer les modifications",
   "common.cancel": "Annuler",

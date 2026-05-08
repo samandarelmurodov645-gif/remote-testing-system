@@ -6,23 +6,29 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useTransition,
 } from "react";
-import { type Lang, getT, translations } from "@/lib/i18n/translations";
+import { useRouter } from "next/navigation";
+import { type Lang, getT } from "@/lib/i18n/translations";
 
 interface LanguageContextValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: (key: string) => string;
+  isChanging: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextValue>({
   lang: "uz",
   setLang: () => {},
   t: (key) => key,
+  isChanging: false,
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("uz");
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     const stored =
@@ -40,12 +46,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLangState(newLang);
     localStorage.setItem("lang", newLang);
     document.cookie = `lang=${newLang}; path=/; max-age=31536000; SameSite=lax`;
+    // Refresh server components so they re-render with the new language cookie
+    startTransition(() => {
+      router.refresh();
+    });
   }
 
   const t = getT(lang);
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, isChanging: isPending }}>
       {children}
     </LanguageContext.Provider>
   );
