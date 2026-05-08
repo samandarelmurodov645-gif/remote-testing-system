@@ -70,8 +70,15 @@ export function CompetitionRunner({
   };
 
   const handleTimeout = () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     alert(t("comp.runner.timeout"));
-    handleSubmit();
+    const formData = new FormData();
+    formData.append("competition_id", competitionId);
+    formData.append("answers", JSON.stringify(answers));
+    submitCompetitionAction(formData).catch((err) => {
+      console.error("Timeout submit error:", err);
+    });
   };
 
   const answeredCount = Object.keys(answers).length;

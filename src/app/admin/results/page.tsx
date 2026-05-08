@@ -51,8 +51,8 @@ export default async function AdminResultsPage() {
         {[
           { label: t("attempt.completed"), value: completed, color: "text-emerald-600", bg: "bg-emerald-50" },
           { label: t("attempt.inProgress"), value: inProgress, color: "text-amber-600", bg: "bg-amber-50" },
-          { label: "Avg Score", value: avgScore, color: "text-indigo-600", bg: "bg-indigo-50" },
-          { label: "Total", value: attempts?.length ?? 0, color: "text-slate-700", bg: "bg-slate-50" },
+          { label: t("admin.results.avgScore"), value: avgScore, color: "text-indigo-600", bg: "bg-indigo-50" },
+          { label: t("admin.results.total"), value: attempts?.length ?? 0, color: "text-slate-700", bg: "bg-slate-50" },
         ].map((s, i) => (
           <div key={i} className={`${s.bg} rounded-xl p-4 border border-white`}>
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>

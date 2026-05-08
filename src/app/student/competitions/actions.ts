@@ -54,13 +54,13 @@ export async function joinCompetitionAction(formData: FormData) {
     .select("id")
     .eq("test_id", competition.test_id)
     .eq("student_id", user.id)
-    .not("submitted_at", "is", null)
-    .single();
+    .in("status", ["submitted", "expired"])
+    .maybeSingle();
 
   if (previousAttempt) {
     redirect(
       `/student/competitions/${competitionId}?error=${encodeURIComponent(
-        "Siz bu testni avval bajargansiz. Musobaqaga faqat yangi ishtirokchilar qatnasha oladi."
+        "You have already completed this test. Only new participants can join this competition."
       )}`
     );
   }

@@ -292,6 +292,19 @@ const uz: TranslationMap = {
   "lang.fr": "Français",
   "lang.select": "Tilni tanlang",
 
+  // Admin results extras
+  "admin.results.avgScore": "O'rtacha ball",
+  "admin.results.total": "Jami",
+
+  // Student results extras
+  "student.results.avgScore": "O'rtacha ball",
+  "student.results.total": "Jami",
+
+  // Leaderboard
+  "comp.you": "Siz",
+  "comp.leaderboard.empty": "Natijalar yo'q",
+  "comp.leaderboard.emptyDesc": "Hali hech kim musobaqani yakunlamagan",
+
   // Competition admin
   "comp.admin.createTitle": "Yangi Musobaqa Yaratish",
   "comp.admin.name": "Musobaqa Nomi",
@@ -370,6 +383,22 @@ const uz: TranslationMap = {
   "login.passwordPlaceholder": "Parolingizni kiriting",
   "login.passwordHint": "Kamida 8 ta belgi bo'lishi kerak",
   "login.forgotPassword": "Parolni unutdingizmi?",
+
+  // Excel create (new test from file)
+  "excel.create.title": "Excel fayldan test yaratish",
+  "excel.create.desc": "Excel yoki CSV fayl yuklang — test va barcha savollar avtomatik yaratiladi",
+  "excel.create.dropZone": "Excel faylni bu yerga tashlang yoki tanlash uchun bosing",
+  "excel.create.dropHint": ".xlsx va .csv formatlar qo'llab-quvvatlanadi",
+  "excel.create.clickToChange": "Faylni o'zgartirish uchun bosing",
+  "excel.create.guideTitle": "Fayl formati ko'rsatmasi",
+  "excel.create.colQ": "Savol",
+  "excel.create.colC": "To'g'riJavob",
+  "excel.create.rule1": "To'g'ri javob 1–4 oralig'ida bo'lishi kerak",
+  "excel.create.rule2": "Birinchi qator sarlavhalar bo'lishi kerak",
+  "excel.create.rule3": "Faylda maksimal 25 ta savol bo'lishi mumkin",
+  "excel.create.rule4": "Fayl nomi test nomi sifatida ishlatiladi",
+  "excel.create.confirmBtn": "Test yaratish va savollarni import qilish",
+  "excel.create.creating": "Test yaratilmoqda...",
 };
 
 const en: TranslationMap = {
@@ -631,6 +660,19 @@ const en: TranslationMap = {
   "lang.fr": "Français",
   "lang.select": "Select Language",
 
+  // Admin results extras
+  "admin.results.avgScore": "Avg Score",
+  "admin.results.total": "Total",
+
+  // Student results extras
+  "student.results.avgScore": "Avg Score",
+  "student.results.total": "Total",
+
+  // Leaderboard
+  "comp.you": "You",
+  "comp.leaderboard.empty": "No results yet",
+  "comp.leaderboard.emptyDesc": "No one has completed the competition yet",
+
   // Competition admin
   "comp.admin.createTitle": "Create New Competition",
   "comp.admin.name": "Competition Name",
@@ -709,6 +751,22 @@ const en: TranslationMap = {
   "login.passwordPlaceholder": "Enter your password",
   "login.passwordHint": "Must be at least 8 characters",
   "login.forgotPassword": "Forgot password?",
+
+  // Excel create (new test from file)
+  "excel.create.title": "Create Test from Excel",
+  "excel.create.desc": "Upload an Excel or CSV file — a new test with all questions will be created automatically",
+  "excel.create.dropZone": "Drag & drop Excel file here or click to browse",
+  "excel.create.dropHint": "Supports .xlsx and .csv files",
+  "excel.create.clickToChange": "Click to change file",
+  "excel.create.guideTitle": "File Format Guide",
+  "excel.create.colQ": "Question",
+  "excel.create.colC": "CorrectAnswer",
+  "excel.create.rule1": "CorrectAnswer must be between 1–4",
+  "excel.create.rule2": "First row must be column headers",
+  "excel.create.rule3": "Maximum 25 questions per file",
+  "excel.create.rule4": "File name will be used as test title",
+  "excel.create.confirmBtn": "Create Test & Import Questions",
+  "excel.create.creating": "Creating test...",
 };
 
 const ru: TranslationMap = {
@@ -968,6 +1026,19 @@ const ru: TranslationMap = {
   "lang.fr": "Français",
   "lang.select": "Выбрать язык",
 
+  // Admin results extras
+  "admin.results.avgScore": "Средний балл",
+  "admin.results.total": "Итого",
+
+  // Student results extras
+  "student.results.avgScore": "Средний балл",
+  "student.results.total": "Итого",
+
+  // Leaderboard
+  "comp.you": "Вы",
+  "comp.leaderboard.empty": "Результатов нет",
+  "comp.leaderboard.emptyDesc": "Ещё никто не завершил соревнование",
+
   // Competition admin
   "comp.admin.createTitle": "Создать новое соревнование",
   "comp.admin.name": "Название соревнования",
@@ -1046,6 +1117,22 @@ const ru: TranslationMap = {
   "login.passwordPlaceholder": "Введите пароль",
   "login.passwordHint": "Не менее 8 символов",
   "login.forgotPassword": "Забыли пароль?",
+
+  // Excel create (new test from file)
+  "excel.create.title": "Создать тест из Excel",
+  "excel.create.desc": "Загрузите файл Excel или CSV — новый тест со всеми вопросами будет создан автоматически",
+  "excel.create.dropZone": "Перетащите файл Excel сюда или нажмите для выбора",
+  "excel.create.dropHint": "Поддерживает файлы .xlsx и .csv",
+  "excel.create.clickToChange": "Нажмите для смены файла",
+  "excel.create.guideTitle": "Руководство по формату файла",
+  "excel.create.colQ": "Вопрос",
+  "excel.create.colC": "ПравОтвет",
+  "excel.create.rule1": "ПравильныйОтвет должен быть от 1 до 4",
+  "excel.create.rule2": "Первая строка должна содержать заголовки",
+  "excel.create.rule3": "Максимум 25 вопросов в файле",
+  "excel.create.rule4": "Имя файла будет использоваться как название теста",
+  "excel.create.confirmBtn": "Создать тест и импортировать вопросы",
+  "excel.create.creating": "Создание теста...",
 };
 
 const fr: TranslationMap = {
@@ -1311,6 +1398,19 @@ const fr: TranslationMap = {
   "lang.fr": "Français",
   "lang.select": "Choisir la langue",
 
+  // Admin results extras
+  "admin.results.avgScore": "Score moyen",
+  "admin.results.total": "Total",
+
+  // Student results extras
+  "student.results.avgScore": "Score moyen",
+  "student.results.total": "Total",
+
+  // Leaderboard
+  "comp.you": "Vous",
+  "comp.leaderboard.empty": "Pas encore de résultats",
+  "comp.leaderboard.emptyDesc": "Personne n'a encore terminé la compétition",
+
   // Competition admin
   "comp.admin.createTitle": "Créer une nouvelle compétition",
   "comp.admin.name": "Nom de la compétition",
@@ -1389,6 +1489,22 @@ const fr: TranslationMap = {
   "login.passwordPlaceholder": "Entrez votre mot de passe",
   "login.passwordHint": "Minimum 8 caractères",
   "login.forgotPassword": "Mot de passe oublié?",
+
+  // Excel create (new test from file)
+  "excel.create.title": "Créer un test depuis Excel",
+  "excel.create.desc": "Téléchargez un fichier Excel ou CSV — un nouveau test avec toutes les questions sera créé automatiquement",
+  "excel.create.dropZone": "Glissez-déposez le fichier Excel ici ou cliquez pour parcourir",
+  "excel.create.dropHint": "Prend en charge les fichiers .xlsx et .csv",
+  "excel.create.clickToChange": "Cliquez pour changer de fichier",
+  "excel.create.guideTitle": "Guide du format de fichier",
+  "excel.create.colQ": "Question",
+  "excel.create.colC": "RépCorrecte",
+  "excel.create.rule1": "RéponseCorrecte doit être entre 1 et 4",
+  "excel.create.rule2": "La première ligne doit être les en-têtes de colonnes",
+  "excel.create.rule3": "Maximum 25 questions par fichier",
+  "excel.create.rule4": "Le nom du fichier sera utilisé comme titre du test",
+  "excel.create.confirmBtn": "Créer le test et importer les questions",
+  "excel.create.creating": "Création du test...",
 };
 
 export const translations: Record<Lang, TranslationMap> = { uz, en, ru, fr };

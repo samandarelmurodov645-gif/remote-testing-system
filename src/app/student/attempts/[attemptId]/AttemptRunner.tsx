@@ -41,8 +41,8 @@ export default function AttemptRunner(props: {
   const ss = String(remainingSeconds % 60).padStart(2, "0");
 
   useEffect(() => {
-    const t = setInterval(() => setNowMs(Date.now()), 250);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setNowMs(Date.now()), 250);
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {

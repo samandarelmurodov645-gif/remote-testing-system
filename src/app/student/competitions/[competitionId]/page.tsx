@@ -100,8 +100,8 @@ export default async function CompetitionDetailPage({
     .select("id")
     .eq("test_id", competition.test_id)
     .eq("student_id", user.id)
-    .not("submitted_at", "is", null)
-    .single();
+    .in("status", ["submitted", "expired"])
+    .maybeSingle();
 
   const testInfo = Array.isArray(competition.test)
     ? competition.test[0]

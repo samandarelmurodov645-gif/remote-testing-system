@@ -1,4 +1,7 @@
+"use client";
+
 import { Badge } from "@/components/ui";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type CompetitionStatus = "upcoming" | "active" | "ended";
 
@@ -20,22 +23,17 @@ export function getCompetitionStatus(
   return "active";
 }
 
-export function CompetitionStatusBadge({
-  startTime,
-  endTime,
-}: CompetitionStatusBadgeProps) {
+export function CompetitionStatusBadge({ startTime, endTime }: CompetitionStatusBadgeProps) {
+  const { t } = useLanguage();
   const status = getCompetitionStatus(startTime, endTime);
 
-  const variants: Record<
-    CompetitionStatus,
-    { variant: "info" | "success" | "default"; label: string }
-  > = {
-    upcoming: { variant: "info", label: "Yakinda" },
-    active: { variant: "success", label: "Faol" },
-    ended: { variant: "default", label: "Yakunlangan" },
+  const variants: Record<CompetitionStatus, { variant: "info" | "success" | "default"; labelKey: string }> = {
+    upcoming: { variant: "info", labelKey: "comp.upcoming" },
+    active: { variant: "success", labelKey: "comp.active" },
+    ended: { variant: "default", labelKey: "comp.ended" },
   };
 
-  const { variant, label } = variants[status];
+  const { variant, labelKey } = variants[status];
 
-  return <Badge variant={variant}>{label}</Badge>;
+  return <Badge variant={variant}>{t(labelKey)}</Badge>;
 }

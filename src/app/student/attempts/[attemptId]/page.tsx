@@ -1,6 +1,8 @@
 import Link from "next/link";
 import AttemptRunner from "./AttemptRunner";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getServerT } from "@/lib/i18n";
+import { Button, Card } from "@/components/ui";
 
 export default async function StudentAttemptPage({
   params,
@@ -9,6 +11,7 @@ export default async function StudentAttemptPage({
 }) {
   const { attemptId } = await params;
   const supabase = await createSupabaseServerClient();
+  const t = await getServerT();
 
   const { data: attempt } = await supabase
     .from("attempts")
@@ -18,22 +21,32 @@ export default async function StudentAttemptPage({
 
   if (!attempt) {
     return (
-      <div className="space-y-3">
-        <p>Attempt not found.</p>
-        <Link className="underline" href="/student/tests">
-          Back
-        </Link>
+      <div className="max-w-md mx-auto mt-8">
+        <Card variant="bordered" padding="lg">
+          <div className="text-center py-8">
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">{t("student.testDetail.notFound")}</h2>
+            <p className="text-slate-600 mb-6">{t("student.testDetail.notFoundDesc")}</p>
+            <Link href="/student/tests">
+              <Button variant="primary">{t("student.testDetail.backToTests")}</Button>
+            </Link>
+          </div>
+        </Card>
       </div>
     );
   }
 
   if (attempt.status !== "in_progress") {
     return (
-      <div className="space-y-3">
-        <p>This attempt is already finished.</p>
-        <Link className="underline" href="/student/results">
-          Go to results
-        </Link>
+      <div className="max-w-md mx-auto mt-8">
+        <Card variant="bordered" padding="lg">
+          <div className="text-center py-8">
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">{t("attempt.completed")}</h2>
+            <p className="text-slate-600 mb-6">{t("attempt.submitted")}</p>
+            <Link href="/student/results">
+              <Button variant="primary">{t("student.results.backToTests")}</Button>
+            </Link>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -46,11 +59,15 @@ export default async function StudentAttemptPage({
 
   if (!test) {
     return (
-      <div className="space-y-3">
-        <p>Test not found.</p>
-        <Link className="underline" href="/student/tests">
-          Back
-        </Link>
+      <div className="max-w-md mx-auto mt-8">
+        <Card variant="bordered" padding="lg">
+          <div className="text-center py-8">
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">{t("student.testDetail.notFound")}</h2>
+            <Link href="/student/tests">
+              <Button variant="primary">{t("student.testDetail.backToTests")}</Button>
+            </Link>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -98,9 +115,6 @@ export default async function StudentAttemptPage({
 
   return (
     <div className="space-y-4">
-      <Link className="underline" href="/student/tests">
-        Back
-      </Link>
       <AttemptRunner
         attemptId={attempt.id}
         testTitle={test.title}

@@ -5,6 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button, Card, Badge } from "@/components/ui";
 import {
   getWeeklyExamDataAction,
+  submitWeeklyExamAction,
   type WeeklyExamData,
   type LeaderboardEntry,
 } from "./actions";
@@ -72,15 +73,12 @@ export default function WeeklyExamRunner({
 
   function submitExam() {
     if (!examData) return;
-    let score = 0;
-    // Count answered questions as score (since we don't know correct answers client-side)
-    // Score = number of answered questions for now (actual scoring requires server)
-    score = Object.keys(answers).length;
-
-    const res = { score, total: examData.questions.length };
-    localStorage.setItem(`weekly-exam-${weekId}`, JSON.stringify(res));
-    setResult(res);
-    setState("done");
+    startTransition(async () => {
+      const res = await submitWeeklyExamAction(answers);
+      localStorage.setItem(`weekly-exam-${weekId}`, JSON.stringify(res));
+      setResult(res);
+      setState("done");
+    });
   }
 
   if (state === "loading") {
@@ -165,9 +163,14 @@ export default function WeeklyExamRunner({
             variant="primary"
             size="lg"
             onClick={submitExam}
-            disabled={answered === 0}
+            disabled={answered === 0 || isPending}
           >
-            {t("attempt.submit")}
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-indigo-200 border-t-white rounded-full animate-spin" />
+                {t("attempt.submitting")}
+              </span>
+            ) : t("attempt.submit")}
           </Button>
         </div>
       </div>

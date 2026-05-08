@@ -127,6 +127,30 @@ export async function getWeeklyExamDataAction(): Promise<WeeklyExamData | null> 
   };
 }
 
+export async function submitWeeklyExamAction(
+  answers: Record<string, string>
+): Promise<{ score: number; total: number }> {
+  const questionIds = Object.keys(answers);
+  const total = questionIds.length;
+  if (total === 0) return { score: 0, total: 0 };
+
+  const user = await getCurrentUser();
+  if (!user) return { score: 0, total };
+
+  const supabase = await createSupabaseServerClient();
+  const { data: correctRows } = await supabase
+    .from("correct_options")
+    .select("question_id,option_id")
+    .in("question_id", questionIds);
+
+  let score = 0;
+  correctRows?.forEach((row) => {
+    if (answers[row.question_id] === row.option_id) score++;
+  });
+
+  return { score, total };
+}
+
 export async function getWeeklyLeaderboardAction(): Promise<LeaderboardEntry[]> {
   const supabase = await createSupabaseServerClient();
 

@@ -4,6 +4,7 @@ import { createTestAction, deleteTestAction } from "./actions";
 import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
+import { ExcelUploadAndCreate } from "./ExcelUploadAndCreate";
 
 export default async function AdminTestsPage({
   searchParams,
@@ -110,6 +111,9 @@ export default async function AdminTestsPage({
           <p className="text-red-600">{decodeURIComponent(error)}</p>
         </div>
       )}
+
+      {/* Excel Upload & Create */}
+      <ExcelUploadAndCreate />
 
       {/* Create Test Form */}
       <Card variant="bordered" padding="lg" className="mb-8">

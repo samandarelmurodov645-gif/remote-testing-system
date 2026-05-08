@@ -22,13 +22,10 @@ export default async function StudentResultsPage() {
   tests.forEach((t) => titleById.set(t.id, t.title));
 
   const completedCount = (attempts ?? []).filter((a) => a.status === "submitted" || a.status === "expired").length;
+  const scoredAttempts = (attempts ?? []).filter((a) => a.score !== null);
   const avgScore =
-    completedCount > 0
-      ? Math.round(
-          (attempts ?? [])
-            .filter((a) => a.score !== null)
-            .reduce((sum, a) => sum + (a.score ?? 0), 0) / completedCount
-        )
+    scoredAttempts.length > 0
+      ? Math.round(scoredAttempts.reduce((sum, a) => sum + (a.score ?? 0), 0) / scoredAttempts.length)
       : null;
 
   return (
@@ -53,12 +50,12 @@ export default async function StudentResultsPage() {
           {avgScore !== null && (
             <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
               <div className="text-2xl font-bold text-emerald-600">{avgScore}</div>
-              <div className="text-xs text-slate-600 mt-0.5">Avg {t("student.results.score")}</div>
+              <div className="text-xs text-slate-600 mt-0.5">{t("student.results.avgScore")}</div>
             </div>
           )}
           <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
             <div className="text-2xl font-bold text-slate-700">{attempts?.length ?? 0}</div>
-            <div className="text-xs text-slate-600 mt-0.5">Total</div>
+            <div className="text-xs text-slate-600 mt-0.5">{t("student.results.total")}</div>
           </div>
         </div>
       )}
