@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { signInAction, signUpAction } from "./actions";
 import { Button, Input } from "@/components/ui";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 export default function LoginForm({ nextPath }: { nextPath: string }) {
   const { t } = useLanguage();
@@ -94,7 +95,12 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
       </div>
 
       {/* Right: Form panel */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-slate-50">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-slate-50 relative">
+        <div className="absolute top-4 right-4">
+          <div className="bg-slate-800 rounded-xl">
+            <LanguageSwitcher dropUp={false} />
+          </div>
+        </div>
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2.5 mb-8">

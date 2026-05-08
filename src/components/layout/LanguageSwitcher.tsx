@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES } from "@/lib/i18n/translations";
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ dropUp = true }: { dropUp?: boolean }) {
   const { lang, setLang, t, isChanging } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute bottom-full left-0 mb-2 w-44 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-50">
+        <div className={`absolute ${dropUp ? "bottom-full left-0 mb-2" : "top-full right-0 mt-2"} w-44 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-50`}>
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
