@@ -73,13 +73,14 @@ export default async function StudentTestsPage({
 
         {/* Tests grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredTests.map((test) => {
+          {filteredTests.map((test, idx) => {
             const difficulty = getDifficultyFromTime(test.time_limit_seconds);
             const diff = difficultyConfig[difficulty];
+            const delayClass = idx < 8 ? `delay-${[75,100,150,200,300,400,500,600][idx]}` : "";
 
             return (
               <Link key={test.id} href={`/student/tests/${test.id}`} className="group block">
-                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden card-hover h-full flex flex-col">
+                <div className={`subject-card animate-pop-in ${delayClass} bg-white border border-slate-200 rounded-2xl overflow-hidden h-full flex flex-col`}>
                   <div className={`h-1.5 bg-gradient-to-r ${gradient}`} />
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-start justify-between gap-3 mb-4">
@@ -181,10 +182,11 @@ export default async function StudentTestsPage({
         </Card>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {allActiveSubjects.map((subject) => {
+          {allActiveSubjects.map((subject, idx) => {
             const count = subjectCounts.get(subject) ?? 0;
             const gradient = SUBJECT_GRADIENT[subject] ?? "from-indigo-500 to-purple-600";
             const emoji = SUBJECT_EMOJI[subject] ?? "📝";
+            const delayClass = idx < 8 ? `delay-${[75,100,150,200,300,400,500,600][idx]}` : "";
 
             return (
               <Link
@@ -192,24 +194,30 @@ export default async function StudentTestsPage({
                 href={`/student/tests?subject=${encodeURIComponent(subject)}`}
                 className="group block"
               >
-                <div className="relative bg-white border-2 border-slate-200 rounded-2xl overflow-hidden card-hover h-full flex flex-col items-center text-center p-6 group-hover:border-indigo-200 transition-colors">
-                  {/* Top gradient accent */}
-                  <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient}`} />
+                <div className={`subject-card animate-pop-in ${delayClass} relative bg-white border-2 border-slate-100 rounded-2xl h-full flex flex-col items-center text-center p-6 group-hover:border-indigo-100`}>
+                  {/* Top gradient accent bar */}
+                  <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient} rounded-t-2xl`} />
+
+                  {/* Glow backing (visible on hover) */}
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
                   {/* Emoji icon */}
                   <div
-                    className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform mt-2`}
+                    className={`relative w-22 h-22 w-[88px] h-[88px] rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 mt-3 shadow-lg group-hover:shadow-xl transition-shadow`}
+                    style={{ boxShadow: undefined }}
                   >
-                    <span className="text-4xl">{emoji}</span>
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-30 transition-opacity bg-white" />
+                    <span className="text-4xl relative z-10 group-hover:scale-110 inline-block transition-transform duration-300">{emoji}</span>
                   </div>
 
                   {/* Subject name */}
-                  <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-base font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors relative z-10">
                     {t(`subject.${subject}`)}
                   </h3>
 
-                  {/* Count */}
-                  <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${gradient} text-white shadow-sm`}>
+                  {/* Count badge */}
+                  <div className={`relative z-10 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${gradient} text-white shadow-md`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
                     {count} {t("subject.testsCount")}
                   </div>
                 </div>

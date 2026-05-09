@@ -248,3 +248,62 @@ a, button {
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ─── Subject card glow / shine ─────────────────────────── */
+
+@keyframes card-shine {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(250%) skewX(-15deg); }
+}
+
+.subject-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease;
+}
+.subject-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 24px 48px -8px rgba(79, 70, 229, 0.22),
+              0 12px 20px -4px rgba(0, 0, 0, 0.08);
+}
+.subject-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.25),
+    transparent
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  transition: none;
+}
+.subject-card:hover::after {
+  animation: card-shine 0.55s ease forwards;
+}
+
+/* ─── Page entry animation for grid items ───────────────── */
+
+@keyframes pop-in {
+  0%   { opacity: 0; transform: scale(0.88) translateY(12px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-pop-in {
+  opacity: 0;
+  animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── Tilt / 3-D hover for icons ────────────────────────── */
+
+.icon-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.icon-hover:hover {
+  transform: scale(1.15) rotate(-4deg);
+}

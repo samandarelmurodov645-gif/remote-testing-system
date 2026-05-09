@@ -41,15 +41,35 @@ export default async function AttemptResultPage({
 
   if (!test) notFound();
 
-  const { data: questions } = await service
+  type QRowFull = { id: string; prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null; position: number };
+  type ORowFull = { id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number };
+
+  const { data: questionsRaw, error: qErr } = await service
     .from("questions")
     .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
-  const questionIds = (questions ?? []).map((q) => q.id);
+  let questions: QRowFull[];
+  if (qErr) {
+    const { data: fallback } = await service
+      .from("questions")
+      .select("id,prompt,position")
+      .eq("test_id", attempt.test_id)
+      .order("position", { ascending: true });
+    questions = (fallback ?? []).map((q) => ({
+      ...q,
+      question_text_ru: null,
+      question_text_en: null,
+      question_text_fr: null,
+    }));
+  } else {
+    questions = (questionsRaw ?? []) as QRowFull[];
+  }
 
-  const [{ data: options }, { data: correctOptions }, { count: totalAttempts }] =
+  const questionIds = questions.map((q) => q.id);
+
+  const [optResult, { data: correctOptions }, { count: totalAttempts }] =
     await Promise.all([
       questionIds.length
         ? service
@@ -57,7 +77,7 @@ export default async function AttemptResultPage({
             .select("id,question_id,text,option_text_ru,option_text_en,option_text_fr,position")
             .in("question_id", questionIds)
             .order("position", { ascending: true })
-        : Promise.resolve({ data: [] as Array<{ id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number }> }),
+        : Promise.resolve({ data: [] as ORowFull[], error: null }),
       questionIds.length
         ? service
             .from("correct_options")
@@ -72,25 +92,40 @@ export default async function AttemptResultPage({
         .eq("student_id", userData.user.id),
     ]);
 
-  type OptionRow = { id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number };
+  let options: ORowFull[];
+  if (optResult.error) {
+    const { data: fallback } = questionIds.length
+      ? await service
+          .from("options")
+          .select("id,question_id,text,position")
+          .in("question_id", questionIds)
+          .order("position", { ascending: true })
+      : { data: [] as Array<{ id: string; question_id: string; text: string; position: number }> };
+    options = (fallback ?? []).map((o) => ({
+      ...o,
+      option_text_ru: null,
+      option_text_en: null,
+      option_text_fr: null,
+    }));
+  } else {
+    options = (optResult.data ?? []) as ORowFull[];
+  }
 
-  const optionsByQuestion = new Map<string, Array<OptionRow>>();
-  (options ?? []).forEach((o) => {
+  const optionsByQuestion = new Map<string, Array<ORowFull>>();
+  options.forEach((o) => {
     const arr = optionsByQuestion.get(o.question_id) ?? [];
-    arr.push(o as OptionRow);
+    arr.push(o);
     optionsByQuestion.set(o.question_id, arr);
   });
 
-  type QuestionRow = { id: string; prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null; position: number };
-
-  const localizeQ = (q: QuestionRow) => {
+  const localizeQ = (q: QRowFull) => {
     if (lang === "ru") return q.question_text_ru ?? q.prompt;
     if (lang === "en") return q.question_text_en ?? q.prompt;
     if (lang === "fr") return q.question_text_fr ?? q.prompt;
     return q.prompt;
   };
 
-  const localizeO = (o: OptionRow) => {
+  const localizeO = (o: ORowFull) => {
     if (lang === "ru") return o.option_text_ru ?? o.text;
     if (lang === "en") return o.option_text_en ?? o.text;
     if (lang === "fr") return o.option_text_fr ?? o.text;
@@ -103,7 +138,7 @@ export default async function AttemptResultPage({
   });
 
   const studentAnswers = ((attempt.answers ?? {}) as Record<string, string>);
-  const total = (questions ?? []).length;
+  const total = questions.length;
   const score = attempt.score ?? 0;
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const attemptsUsed = totalAttempts ?? 0;
@@ -192,7 +227,7 @@ export default async function AttemptResultPage({
       </h2>
 
       <div className="space-y-4">
-        {(questions ?? []).map((q, idx) => {
+        {questions.map((q, idx) => {
           const opts = optionsByQuestion.get(q.id) ?? [];
           const correctOptId = correctByQuestion.get(q.id);
           const chosenOptId = studentAnswers[q.id];
@@ -220,7 +255,7 @@ export default async function AttemptResultPage({
                   <p className="text-xs font-medium text-slate-400 mb-0.5">
                     {t("attempt.result.question")} {idx + 1}
                   </p>
-                  <p className="text-base font-medium text-slate-900">{localizeQ(q as QuestionRow)}</p>
+                  <p className="text-base font-medium text-slate-900">{localizeQ(q)}</p>
                 </div>
               </div>
 
@@ -275,7 +310,7 @@ export default async function AttemptResultPage({
                             : "text-slate-700"
                         }`}
                       >
-                        {localizeO(o as OptionRow)}
+                        {localizeO(o)}
                       </span>
                       {isCorrectOpt && (
                         <span className="text-xs font-semibold text-emerald-600 shrink-0 whitespace-nowrap">

@@ -55,6 +55,19 @@ export async function signUpAction(formData: FormData) {
     return { ok: false as const, message: error.message };
   }
 
-  // If email confirmations are enabled, user may need to confirm first.
-  redirect(parsed.data.next || "/");
+  // Auto sign-in immediately after registration so the user lands on the dashboard.
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
+
+  if (signInError) {
+    // Email confirmation is likely required in Supabase settings.
+    return {
+      ok: false as const,
+      message: "Registration successful! Please check your email to confirm your account, then sign in.",
+    };
+  }
+
+  redirect(parsed.data.next || "/student/tests");
 }

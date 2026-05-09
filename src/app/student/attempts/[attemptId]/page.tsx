@@ -61,30 +61,64 @@ export default async function StudentAttemptPage({
     );
   }
 
-  const { data: questions } = await supabase
+  type QRowFull = {
+    id: string; prompt: string; position: number;
+    question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null;
+  };
+  type ORowFull = {
+    id: string; question_id: string; text: string; position: number;
+    option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null;
+  };
+
+  // Try to fetch with translation columns; fall back if the migration hasn't been run yet.
+  const { data: questionsRaw, error: qErr } = await supabase
     .from("questions")
     .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
-  const questionIds = (questions ?? []).map((q) => q.id);
-  const options: Array<{
-    id: string;
-    question_id: string;
-    text: string;
-    option_text_ru: string | null;
-    option_text_en: string | null;
-    option_text_fr: string | null;
-    position: number;
-  }> = questionIds.length
-    ? (
-        await supabase
-          .from("options")
-          .select("id,question_id,text,option_text_ru,option_text_en,option_text_fr,position")
-          .in("question_id", questionIds)
-          .order("position", { ascending: true })
-      ).data ?? []
-    : [];
+  let questions: QRowFull[];
+  if (qErr) {
+    const { data: fallback } = await supabase
+      .from("questions")
+      .select("id,prompt,position")
+      .eq("test_id", attempt.test_id)
+      .order("position", { ascending: true });
+    questions = (fallback ?? []).map((q) => ({
+      ...q,
+      question_text_ru: null,
+      question_text_en: null,
+      question_text_fr: null,
+    }));
+  } else {
+    questions = (questionsRaw ?? []) as QRowFull[];
+  }
+
+  const questionIds = questions.map((q) => q.id);
+
+  let options: ORowFull[] = [];
+  if (questionIds.length) {
+    const { data: optionsRaw, error: oErr } = await supabase
+      .from("options")
+      .select("id,question_id,text,option_text_ru,option_text_en,option_text_fr,position")
+      .in("question_id", questionIds)
+      .order("position", { ascending: true });
+    if (oErr) {
+      const { data: fallback } = await supabase
+        .from("options")
+        .select("id,question_id,text,position")
+        .in("question_id", questionIds)
+        .order("position", { ascending: true });
+      options = (fallback ?? []).map((o) => ({
+        ...o,
+        option_text_ru: null,
+        option_text_en: null,
+        option_text_fr: null,
+      }));
+    } else {
+      options = (optionsRaw ?? []) as ORowFull[];
+    }
+  }
 
   const optionsByQuestion = new Map<string, typeof options>();
   options.forEach((o) => {

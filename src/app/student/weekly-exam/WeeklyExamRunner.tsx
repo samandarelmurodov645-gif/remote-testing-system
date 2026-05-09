@@ -179,26 +179,31 @@ export default function WeeklyExamRunner({
 
   if ((state === "done" || state === "already-taken") && result) {
     const pct = Math.round((result.score / result.total) * 100);
+    const scoreGradient = pct >= 70 ? "from-emerald-500 to-teal-600" : pct >= 40 ? "from-amber-500 to-orange-500" : "from-red-500 to-rose-600";
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Result card */}
-        <Card variant="elevated" padding="lg" className="text-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <span className="text-white text-3xl font-bold">{pct}%</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            {state === "already-taken" ? t("weekly.alreadyTaken") : "🎉 " + t("weekly.yourScore")}
-          </h2>
-          <p className="text-slate-600 mb-6">
-            {t("weekly.correctAnswers")} <span className="font-bold text-slate-900">{result.score}</span>{" "}
-            {t("weekly.outOf")} {result.total}
-          </p>
-          <div className="flex items-center justify-center gap-3 text-sm text-slate-500">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            {t("weekly.nextReset")} {getNextMonday()}
+        <Card variant="elevated" padding="lg" className="text-center relative overflow-hidden">
+          <div className={`absolute inset-0 bg-gradient-to-br ${scoreGradient} opacity-5`} />
+          <div className="relative z-10">
+            <div className={`w-28 h-28 rounded-full bg-gradient-to-br ${scoreGradient} flex flex-col items-center justify-center mx-auto mb-5 shadow-xl`}>
+              <span className="text-white text-3xl font-bold leading-none">{pct}%</span>
+              <span className="text-white/70 text-xs mt-0.5">{t("attempt.result.score")}</span>
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+              {state === "already-taken" ? t("weekly.alreadyTaken") : "🎉 " + t("weekly.yourScore")}
+            </h2>
+            <p className="text-slate-600 mb-4">
+              {t("weekly.correctAnswers")} <span className="font-bold text-slate-900">{result.score}</span>{" "}
+              {t("weekly.outOf")} {result.total}
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {t("weekly.nextReset")} {getNextMonday()}
+            </div>
           </div>
         </Card>
 
