@@ -64,6 +64,7 @@ export default async function StudentAttemptPage({
   type QRowFull = {
     id: string; prompt: string; position: number;
     question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null;
+    question_type: string | null;
   };
   type ORowFull = {
     id: string; question_id: string; text: string; position: number;
@@ -73,7 +74,7 @@ export default async function StudentAttemptPage({
   // Try to fetch with translation columns; fall back if the migration hasn't been run yet.
   const { data: questionsRaw, error: qErr } = await supabase
     .from("questions")
-    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
+    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position,question_type")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
@@ -89,6 +90,7 @@ export default async function StudentAttemptPage({
       question_text_ru: null,
       question_text_en: null,
       question_text_fr: null,
+      question_type: null,
     }));
   } else {
     questions = (questionsRaw ?? []) as QRowFull[];
@@ -147,10 +149,13 @@ export default async function StudentAttemptPage({
   const runnerQuestions = (questions ?? []).map((q) => ({
     id: q.id,
     prompt: localizeQ(q),
-    options: (optionsByQuestion.get(q.id) ?? []).map((o) => ({
-      id: o.id,
-      text: localizeO(o),
-    })),
+    question_type: (q.question_type ?? "multiple_choice") as "multiple_choice" | "open_answer",
+    options: q.question_type === "open_answer"
+      ? []
+      : (optionsByQuestion.get(q.id) ?? []).map((o) => ({
+          id: o.id,
+          text: localizeO(o),
+        })),
   }));
 
   return (

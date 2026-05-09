@@ -94,7 +94,7 @@ export async function getWeeklyExamDataAction(): Promise<WeeklyExamData | null> 
   const usedIds = new Set(wrongToUse);
 
   const newQuestions = questionIds
-    .filter((id) => !usedIds.has(id))
+    .filter((id) => !answeredQuestionIds.has(id))
     .sort(() => Math.random() - 0.5)
     .slice(0, TOTAL - wrongToUse.length);
 

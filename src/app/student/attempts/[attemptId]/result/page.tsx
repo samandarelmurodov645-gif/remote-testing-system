@@ -41,12 +41,12 @@ export default async function AttemptResultPage({
 
   if (!test) notFound();
 
-  type QRowFull = { id: string; prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null; position: number };
+  type QRowFull = { id: string; prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null; position: number; question_type: string | null; correct_answer_text: string | null };
   type ORowFull = { id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number };
 
   const { data: questionsRaw, error: qErr } = await service
     .from("questions")
-    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
+    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position,question_type,correct_answer_text")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
@@ -62,6 +62,8 @@ export default async function AttemptResultPage({
       question_text_ru: null,
       question_text_en: null,
       question_text_fr: null,
+      question_type: null,
+      correct_answer_text: null,
     }));
   } else {
     questions = (questionsRaw ?? []) as QRowFull[];
@@ -230,8 +232,16 @@ export default async function AttemptResultPage({
         {questions.map((q, idx) => {
           const opts = optionsByQuestion.get(q.id) ?? [];
           const correctOptId = correctByQuestion.get(q.id);
-          const chosenOptId = studentAnswers[q.id];
-          const isCorrect = !!chosenOptId && chosenOptId === correctOptId;
+          const studentAnswer = studentAnswers[q.id];
+          const isOpenAnswer = q.question_type === "open_answer";
+
+          const isCorrect = isOpenAnswer
+            ? Boolean(
+                studentAnswer?.trim() &&
+                q.correct_answer_text &&
+                studentAnswer.trim().toLowerCase() === q.correct_answer_text.trim().toLowerCase()
+              )
+            : Boolean(studentAnswer && studentAnswer === correctOptId);
 
           return (
             <div
@@ -259,79 +269,111 @@ export default async function AttemptResultPage({
                 </div>
               </div>
 
-              {/* Options */}
-              <div className="space-y-2 ml-10">
-                {opts.map((o) => {
-                  const isCorrectOpt = o.id === correctOptId;
-                  const isChosen = o.id === chosenOptId;
-                  const isWrong = isChosen && !isCorrectOpt;
+              {isOpenAnswer ? (
+                /* Open-ended answer breakdown */
+                <div className="space-y-2 ml-10">
+                  <div className={`p-3 rounded-xl border-2 ${
+                    studentAnswer?.trim()
+                      ? isCorrect ? "border-emerald-400 bg-emerald-50" : "border-red-400 bg-red-50"
+                      : "border-slate-200 bg-white"
+                  }`}>
+                    <p className={`text-xs font-semibold mb-1 ${
+                      isCorrect ? "text-emerald-600" : studentAnswer?.trim() ? "text-red-600" : "text-slate-400"
+                    }`}>
+                      {t("attempt.result.yourTextAnswer")}
+                    </p>
+                    {studentAnswer?.trim() ? (
+                      <p className={`text-sm ${isCorrect ? "text-emerald-900 font-medium" : "text-red-900 font-medium"}`}>
+                        {studentAnswer}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-slate-400 italic">{t("attempt.notAnswered")}</p>
+                    )}
+                  </div>
+                  {q.correct_answer_text && (
+                    <div className="p-3 rounded-xl border-2 border-emerald-400 bg-emerald-50">
+                      <p className="text-xs font-semibold text-emerald-600 mb-1">
+                        {t("attempt.result.correctTextAnswer")}
+                      </p>
+                      <p className="text-sm text-emerald-900 font-medium">{q.correct_answer_text}</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Multiple-choice answer breakdown */
+                <div className="space-y-2 ml-10">
+                  {opts.map((o) => {
+                    const isCorrectOpt = o.id === correctOptId;
+                    const isChosen = o.id === studentAnswer;
+                    const isWrong = isChosen && !isCorrectOpt;
 
-                  return (
-                    <div
-                      key={o.id}
-                      className={`flex items-center gap-3 p-3 rounded-xl border-2 ${
-                        isCorrectOpt
-                          ? "border-emerald-400 bg-emerald-50"
-                          : isWrong
-                          ? "border-red-400 bg-red-50"
-                          : "border-slate-200 bg-white"
-                      }`}
-                    >
+                    return (
                       <div
-                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                        key={o.id}
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 ${
                           isCorrectOpt
-                            ? "border-emerald-500 bg-emerald-500"
+                            ? "border-emerald-400 bg-emerald-50"
                             : isWrong
-                            ? "border-red-500 bg-red-500"
-                            : "border-slate-300"
+                            ? "border-red-400 bg-red-50"
+                            : "border-slate-200 bg-white"
                         }`}
                       >
+                        <div
+                          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                            isCorrectOpt
+                              ? "border-emerald-500 bg-emerald-500"
+                              : isWrong
+                              ? "border-red-500 bg-red-500"
+                              : "border-slate-300"
+                          }`}
+                        >
+                          {isCorrectOpt && (
+                            <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd" />
+                            </svg>
+                          )}
+                          {isWrong && (
+                            <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </div>
+                        <span
+                          className={`text-sm flex-1 ${
+                            isCorrectOpt
+                              ? "text-emerald-900 font-medium"
+                              : isWrong
+                              ? "text-red-900 font-medium"
+                              : "text-slate-700"
+                          }`}
+                        >
+                          {localizeO(o)}
+                        </span>
                         {isCorrectOpt && (
-                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd" />
-                          </svg>
+                          <span className="text-xs font-semibold text-emerald-600 shrink-0 whitespace-nowrap">
+                            {t("attempt.result.correctAnswer")}
+                          </span>
                         )}
                         {isWrong && (
-                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clipRule="evenodd" />
-                          </svg>
+                          <span className="text-xs font-semibold text-red-600 shrink-0 whitespace-nowrap">
+                            {t("attempt.result.yourAnswer")}
+                          </span>
                         )}
                       </div>
-                      <span
-                        className={`text-sm flex-1 ${
-                          isCorrectOpt
-                            ? "text-emerald-900 font-medium"
-                            : isWrong
-                            ? "text-red-900 font-medium"
-                            : "text-slate-700"
-                        }`}
-                      >
-                        {localizeO(o)}
-                      </span>
-                      {isCorrectOpt && (
-                        <span className="text-xs font-semibold text-emerald-600 shrink-0 whitespace-nowrap">
-                          {t("attempt.result.correctAnswer")}
-                        </span>
-                      )}
-                      {isWrong && (
-                        <span className="text-xs font-semibold text-red-600 shrink-0 whitespace-nowrap">
-                          {t("attempt.result.yourAnswer")}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
 
-                {!chosenOptId && (
-                  <p className="text-sm text-slate-400 italic ml-1 mt-1">
-                    {t("attempt.notAnswered")}
-                  </p>
-                )}
-              </div>
+                  {!studentAnswer && (
+                    <p className="text-sm text-slate-400 italic ml-1 mt-1">
+                      {t("attempt.notAnswered")}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

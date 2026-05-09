@@ -81,7 +81,7 @@ export async function startAttemptAction(formData: FormData) {
 
 const submitSchema = z.object({
   attempt_id: z.string().uuid(),
-  answers: z.record(z.string().uuid(), z.string().uuid()),
+  answers: z.record(z.string().uuid(), z.string()),
   client_finished_at: z.string().optional(),
   expired: z.coerce.boolean().optional(),
 });
@@ -130,17 +130,20 @@ export async function submitAttemptAction(payload: unknown) {
 
   const { data: questions, error: qError } = await service
     .from("questions")
-    .select("id")
+    .select("id,question_type,correct_answer_text")
     .eq("test_id", attempt.test_id);
 
   if (qError) return { ok: false as const, message: qError.message };
 
-  const questionIds = (questions ?? []).map((q) => q.id);
-  const { data: correctRows, error: cError } = questionIds.length
+  const mcQuestionIds = (questions ?? [])
+    .filter((q) => q.question_type !== "open_answer")
+    .map((q) => q.id);
+
+  const { data: correctRows, error: cError } = mcQuestionIds.length
     ? await service
         .from("correct_options")
         .select("question_id,option_id")
-        .in("question_id", questionIds)
+        .in("question_id", mcQuestionIds)
     : { data: [], error: null };
 
   if (cError) return { ok: false as const, message: cError.message };
@@ -151,10 +154,20 @@ export async function submitAttemptAction(payload: unknown) {
   );
 
   let score = 0;
-  for (const qid of questionIds) {
-    const chosen = parsed.data.answers[qid];
-    const correctOpt = correctByQ.get(qid);
-    if (chosen && correctOpt && chosen === correctOpt) score += 1;
+  for (const q of (questions ?? [])) {
+    const chosen = parsed.data.answers[q.id];
+    if (!chosen?.trim()) continue;
+    if (q.question_type === "open_answer") {
+      if (
+        q.correct_answer_text &&
+        chosen.trim().toLowerCase() === q.correct_answer_text.trim().toLowerCase()
+      ) {
+        score += 1;
+      }
+    } else {
+      const correctOpt = correctByQ.get(q.id);
+      if (correctOpt && chosen === correctOpt) score += 1;
+    }
   }
 
   // Filter on status = in_progress so concurrent submits are idempotent:

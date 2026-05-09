@@ -3,12 +3,13 @@ import Link from "next/link";
 import { updateTestAction } from "../actions";
 import {
   addOptionAction,
-  addQuestionAction,
   deleteOptionAction,
   deleteQuestionAction,
   setCorrectOptionAction,
+  setCorrectAnswerTextAction,
   resetAttemptsAction,
 } from "./actions";
+import { AddQuestionForm } from "./AddQuestionForm";
 import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
 import { ExcelImport } from "./ExcelImport";
@@ -56,7 +57,7 @@ export default async function AdminTestDetailPage({
 
   const { data: questions } = await supabase
     .from("questions")
-    .select("id,test_id,prompt,position")
+    .select("id,test_id,prompt,position,question_type,correct_answer_text")
     .eq("test_id", testId)
     .order("position", { ascending: true });
 
@@ -160,18 +161,7 @@ export default async function AdminTestDetailPage({
               </p>
             </div>
           </div>
-          <form action={addQuestionAction} className="flex gap-2">
-            <input type="hidden" name="test_id" value={test.id} />
-            <input name="prompt"
-              className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
-              placeholder={t("admin.testDetail.questionPlaceholder")} required />
-            <Button type="submit" variant="primary">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              {t("admin.testDetail.addQuestion")}
-            </Button>
-          </form>
+          <AddQuestionForm testId={testId} />
         </div>
 
         <div className="space-y-4">
@@ -187,8 +177,16 @@ export default async function AdminTestDetailPage({
                       {qIndex + 1}
                     </div>
                     <div className="flex-1">
-                      <div className="text-sm text-slate-500 mb-1">
-                        {q.position + 1}{t("admin.testDetail.question")}
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm text-slate-500">{q.position + 1}{t("admin.testDetail.question")}</span>
+                        <Badge
+                          variant={q.question_type === "open_answer" ? "default" : "info"}
+                          size="sm"
+                        >
+                          {q.question_type === "open_answer"
+                            ? t("admin.testDetail.openAnswer")
+                            : t("admin.testDetail.multipleChoice")}
+                        </Badge>
                       </div>
                       <div className="text-lg font-medium text-slate-900">{q.prompt}</div>
                     </div>
@@ -205,76 +203,111 @@ export default async function AdminTestDetailPage({
                   </form>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-slate-900">{t("admin.testDetail.options")}</h4>
-                    {selected && (
-                      <Badge variant="success" size="sm">{t("admin.testDetail.correctMarked")}</Badge>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    {qOptions.map((o, oIndex) => (
-                      <div key={o.id} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
-                        selected === o.id ? "border-emerald-500 bg-emerald-50" : "border-slate-200 bg-white"
-                      }`}>
-                        <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-medium text-slate-600 shrink-0">
-                          {String.fromCharCode(65 + oIndex)}
-                        </div>
-                        <div className="flex-1 text-slate-900">{o.text}</div>
-                        <div className="flex items-center gap-2">
-                          <form action={setCorrectOptionAction}>
-                            <input type="hidden" name="test_id" value={test.id} />
-                            <input type="hidden" name="question_id" value={q.id} />
-                            <input type="hidden" name="option_id" value={o.id} />
-                            <Button type="submit" variant={selected === o.id ? "primary" : "outline"} size="sm">
-                              {selected === o.id ? (
-                                <>
-                                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  {t("admin.testDetail.correct")}
-                                </>
-                              ) : t("admin.testDetail.setCorrect")}
-                            </Button>
-                          </form>
-                          <form action={deleteOptionAction}>
-                            <input type="hidden" name="test_id" value={test.id} />
-                            <input type="hidden" name="option_id" value={o.id} />
-                            <Button type="submit" variant="ghost" size="sm">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                            </Button>
-                          </form>
-                        </div>
+                {q.question_type === "open_answer" ? (
+                  /* Open-answer question: show correct answer text editor */
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-slate-900">{t("admin.testDetail.correctAnswerText")}</h4>
+                      {q.correct_answer_text && (
+                        <Badge variant="success" size="sm">{t("admin.testDetail.correctMarked")}</Badge>
+                      )}
+                    </div>
+                    {q.correct_answer_text && (
+                      <div className="p-3 rounded-xl bg-purple-50 border border-purple-200">
+                        <p className="text-sm text-purple-900">{q.correct_answer_text}</p>
                       </div>
-                    ))}
+                    )}
+                    <form action={setCorrectAnswerTextAction} className="flex gap-2">
+                      <input type="hidden" name="test_id" value={test.id} />
+                      <input type="hidden" name="question_id" value={q.id} />
+                      <input
+                        name="correct_answer_text"
+                        defaultValue={q.correct_answer_text ?? ""}
+                        className="flex-1 px-4 py-2.5 rounded-xl border border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm"
+                        placeholder={t("admin.testDetail.correctAnswerPlaceholder")}
+                        required
+                      />
+                      <Button type="submit" variant="secondary">
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        {t("admin.testDetail.setCorrectText")}
+                      </Button>
+                    </form>
+                  </div>
+                ) : (
+                  /* Multiple-choice question: show options */
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-slate-900">{t("admin.testDetail.options")}</h4>
+                      {selected && (
+                        <Badge variant="success" size="sm">{t("admin.testDetail.correctMarked")}</Badge>
+                      )}
+                    </div>
 
-                    {qOptions.length === 0 && (
-                      <div className="text-center py-6 text-slate-500 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
-                        <svg className="w-8 h-8 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="space-y-2">
+                      {qOptions.map((o, oIndex) => (
+                        <div key={o.id} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                          selected === o.id ? "border-emerald-500 bg-emerald-50" : "border-slate-200 bg-white"
+                        }`}>
+                          <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-medium text-slate-600 shrink-0">
+                            {String.fromCharCode(65 + oIndex)}
+                          </div>
+                          <div className="flex-1 text-slate-900">{o.text}</div>
+                          <div className="flex items-center gap-2">
+                            <form action={setCorrectOptionAction}>
+                              <input type="hidden" name="test_id" value={test.id} />
+                              <input type="hidden" name="question_id" value={q.id} />
+                              <input type="hidden" name="option_id" value={o.id} />
+                              <Button type="submit" variant={selected === o.id ? "primary" : "outline"} size="sm">
+                                {selected === o.id ? (
+                                  <>
+                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {t("admin.testDetail.correct")}
+                                  </>
+                                ) : t("admin.testDetail.setCorrect")}
+                              </Button>
+                            </form>
+                            <form action={deleteOptionAction}>
+                              <input type="hidden" name="test_id" value={test.id} />
+                              <input type="hidden" name="option_id" value={o.id} />
+                              <Button type="submit" variant="ghost" size="sm">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </Button>
+                            </form>
+                          </div>
+                        </div>
+                      ))}
+
+                      {qOptions.length === 0 && (
+                        <div className="text-center py-6 text-slate-500 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                          <svg className="w-8 h-8 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          <p className="text-sm">{t("admin.testDetail.noOptions")}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <form action={addOptionAction} className="flex gap-2 mt-4">
+                      <input type="hidden" name="test_id" value={test.id} />
+                      <input type="hidden" name="question_id" value={q.id} />
+                      <input name="text"
+                        className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+                        placeholder={t("admin.testDetail.optionPlaceholder")} required />
+                      <Button type="submit" variant="secondary">
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                         </svg>
-                        <p className="text-sm">{t("admin.testDetail.noOptions")}</p>
-                      </div>
-                    )}
+                        {t("admin.testDetail.addOption")}
+                      </Button>
+                    </form>
                   </div>
-
-                  <form action={addOptionAction} className="flex gap-2 mt-4">
-                    <input type="hidden" name="test_id" value={test.id} />
-                    <input type="hidden" name="question_id" value={q.id} />
-                    <input name="text"
-                      className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
-                      placeholder={t("admin.testDetail.optionPlaceholder")} required />
-                    <Button type="submit" variant="secondary">
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      {t("admin.testDetail.addOption")}
-                    </Button>
-                  </form>
-                </div>
+                )}
               </Card>
             );
           })}

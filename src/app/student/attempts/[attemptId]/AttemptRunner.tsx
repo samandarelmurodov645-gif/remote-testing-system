@@ -8,6 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 type Question = {
   id: string;
   prompt: string;
+  question_type: "multiple_choice" | "open_answer";
   options: Array<{ id: string; text: string }>;
 };
 
@@ -38,7 +39,7 @@ export default function AttemptRunner(props: {
     startedAtMs + props.timeLimitSeconds * 1000 - nowMs
   );
   const remainingSeconds = Math.ceil(remainingMs / 1000);
-  const selectedCount = Object.keys(answers).length;
+  const selectedCount = Object.values(answers).filter((v) => v.trim().length > 0).length;
   const unansweredCount = Math.max(0, props.questions.length - selectedCount);
 
   const mm = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
@@ -107,29 +108,46 @@ export default function AttemptRunner(props: {
                 </div>
               </div>
 
-              <div className="space-y-2 ml-11">
-                {q.options.map((o) => {
-                  const active = answers[q.id] === o.id;
-                  return (
-                    <label key={o.id} className={`flex items-start gap-4 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                      active ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-                    } ${pending || remainingMs === 0 ? "opacity-60 cursor-not-allowed" : ""}`}>
-                      <input
-                        type="radio"
-                        name={`q_${q.id}`}
-                        value={o.id}
-                        checked={active}
-                        onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
-                        disabled={pending || remainingMs === 0}
-                        className="mt-0.5 w-4 h-4 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
-                      />
-                      <span className={`flex-1 text-sm leading-relaxed ${active ? "text-indigo-900 font-medium" : "text-slate-700"}`}>
-                        {o.text}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
+              {q.question_type === "open_answer" ? (
+                <div className="ml-11">
+                  <textarea
+                    value={answers[q.id] ?? ""}
+                    onChange={(e) => setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                    placeholder={t("attempt.typeYourAnswer")}
+                    rows={3}
+                    disabled={pending || remainingMs === 0}
+                    className={`w-full px-4 py-3 rounded-xl border-2 text-sm leading-relaxed transition-all resize-none ${
+                      answers[q.id]?.trim()
+                        ? "border-indigo-300 bg-indigo-50 text-indigo-900"
+                        : "border-slate-200 bg-white text-slate-900"
+                    } ${pending || remainingMs === 0 ? "opacity-60 cursor-not-allowed" : "focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none"}`}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-2 ml-11">
+                  {q.options.map((o) => {
+                    const active = answers[q.id] === o.id;
+                    return (
+                      <label key={o.id} className={`flex items-start gap-4 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                        active ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                      } ${pending || remainingMs === 0 ? "opacity-60 cursor-not-allowed" : ""}`}>
+                        <input
+                          type="radio"
+                          name={`q_${q.id}`}
+                          value={o.id}
+                          checked={active}
+                          onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
+                          disabled={pending || remainingMs === 0}
+                          className="mt-0.5 w-4 h-4 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <span className={`flex-1 text-sm leading-relaxed ${active ? "text-indigo-900 font-medium" : "text-slate-700"}`}>
+                          {o.text}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
             </Card>
           ))}
 

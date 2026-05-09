@@ -10,6 +10,8 @@ import { createSupabaseServiceClient } from "@/lib/supabase/service";
 const addQuestionSchema = z.object({
   test_id: z.string().uuid(),
   prompt: z.string().min(1),
+  question_type: z.enum(["multiple_choice", "open_answer"]).default("multiple_choice"),
+  correct_answer_text: z.string().optional(),
 });
 
 export async function addQuestionAction(formData: FormData) {
@@ -18,6 +20,8 @@ export async function addQuestionAction(formData: FormData) {
   const parsed = addQuestionSchema.safeParse({
     test_id: formData.get("test_id"),
     prompt: formData.get("prompt"),
+    question_type: formData.get("question_type") ?? "multiple_choice",
+    correct_answer_text: (formData.get("correct_answer_text") as string) || undefined,
   });
   if (!parsed.success) redirect("/admin/tests?error=invalid_input");
 
@@ -36,6 +40,28 @@ export async function addQuestionAction(formData: FormData) {
         error.message
       )}`
     );
+
+  // For open-ended questions, update question_type and correct_answer_text on the
+  // freshly inserted row (identified by highest position for this test).
+  if (parsed.data.question_type === "open_answer" || parsed.data.correct_answer_text) {
+    const { data: latestQ } = await supabase
+      .from("questions")
+      .select("id")
+      .eq("test_id", parsed.data.test_id)
+      .order("position", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (latestQ) {
+      await supabase
+        .from("questions")
+        .update({
+          question_type: parsed.data.question_type,
+          correct_answer_text: parsed.data.correct_answer_text ?? null,
+        })
+        .eq("id", latestQ.id);
+    }
+  }
 
   revalidatePath(`/admin/tests/${parsed.data.test_id}`);
   redirect(`/admin/tests/${parsed.data.test_id}`);
@@ -168,6 +194,37 @@ export async function setCorrectOptionAction(formData: FormData) {
       `/admin/tests/${parsed.data.test_id}?error=${encodeURIComponent(
         error.message
       )}`
+    );
+
+  revalidatePath(`/admin/tests/${parsed.data.test_id}`);
+  redirect(`/admin/tests/${parsed.data.test_id}`);
+}
+
+const setCorrectAnswerTextSchema = z.object({
+  test_id: z.string().uuid(),
+  question_id: z.string().uuid(),
+  correct_answer_text: z.string().min(1),
+});
+
+export async function setCorrectAnswerTextAction(formData: FormData) {
+  await requireRole("admin");
+
+  const parsed = setCorrectAnswerTextSchema.safeParse({
+    test_id: formData.get("test_id"),
+    question_id: formData.get("question_id"),
+    correct_answer_text: formData.get("correct_answer_text"),
+  });
+  if (!parsed.success) redirect("/admin/tests?error=invalid_input");
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("questions")
+    .update({ correct_answer_text: parsed.data.correct_answer_text })
+    .eq("id", parsed.data.question_id);
+
+  if (error)
+    redirect(
+      `/admin/tests/${parsed.data.test_id}?error=${encodeURIComponent(error.message)}`
     );
 
   revalidatePath(`/admin/tests/${parsed.data.test_id}`);

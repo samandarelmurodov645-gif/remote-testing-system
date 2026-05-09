@@ -420,6 +420,15 @@ const uz: TranslationMap = {
   "attempt.result.tryAgain": "Qayta urinish",
   "attempt.result.attemptsLeft": "urinish qoldi",
   "attempt.result.question": "Savol",
+  "attempt.result.yourTextAnswer": "Sizning javobingiz",
+  "attempt.result.correctTextAnswer": "To'g'ri javob",
+  "attempt.typeYourAnswer": "Javobingizni bu yerga yozing...",
+  "admin.testDetail.questionType": "Savol turi",
+  "admin.testDetail.multipleChoice": "Ko'p tanlovli",
+  "admin.testDetail.openAnswer": "Ochiq javob",
+  "admin.testDetail.correctAnswerText": "To'g'ri javob matni",
+  "admin.testDetail.correctAnswerPlaceholder": "Kutilayotgan to'g'ri javobni kiriting...",
+  "admin.testDetail.setCorrectText": "To'g'ri javobni saqlash",
 
   // Subjects
   "subject.label": "Fan",
@@ -827,6 +836,15 @@ const en: TranslationMap = {
   "attempt.result.tryAgain": "Try Again",
   "attempt.result.attemptsLeft": "attempts left",
   "attempt.result.question": "Question",
+  "attempt.result.yourTextAnswer": "Your Answer",
+  "attempt.result.correctTextAnswer": "Correct Answer",
+  "attempt.typeYourAnswer": "Type your answer here...",
+  "admin.testDetail.questionType": "Question Type",
+  "admin.testDetail.multipleChoice": "Multiple Choice",
+  "admin.testDetail.openAnswer": "Open Answer",
+  "admin.testDetail.correctAnswerText": "Correct Answer Text",
+  "admin.testDetail.correctAnswerPlaceholder": "Enter the expected correct answer...",
+  "admin.testDetail.setCorrectText": "Save Correct Answer",
 
   // Subjects
   "subject.label": "Subject",
@@ -1232,6 +1250,15 @@ const ru: TranslationMap = {
   "attempt.result.tryAgain": "Попробовать снова",
   "attempt.result.attemptsLeft": "попыток осталось",
   "attempt.result.question": "Вопрос",
+  "attempt.result.yourTextAnswer": "Ваш ответ",
+  "attempt.result.correctTextAnswer": "Правильный ответ",
+  "attempt.typeYourAnswer": "Введите ваш ответ здесь...",
+  "admin.testDetail.questionType": "Тип вопроса",
+  "admin.testDetail.multipleChoice": "Множественный выбор",
+  "admin.testDetail.openAnswer": "Открытый ответ",
+  "admin.testDetail.correctAnswerText": "Текст правильного ответа",
+  "admin.testDetail.correctAnswerPlaceholder": "Введите ожидаемый правильный ответ...",
+  "admin.testDetail.setCorrectText": "Сохранить правильный ответ",
 
   // Subjects
   "subject.label": "Предмет",
@@ -1643,6 +1670,15 @@ const fr: TranslationMap = {
   "attempt.result.tryAgain": "Réessayer",
   "attempt.result.attemptsLeft": "tentatives restantes",
   "attempt.result.question": "Question",
+  "attempt.result.yourTextAnswer": "Votre réponse",
+  "attempt.result.correctTextAnswer": "Réponse correcte",
+  "attempt.typeYourAnswer": "Saisissez votre réponse ici...",
+  "admin.testDetail.questionType": "Type de question",
+  "admin.testDetail.multipleChoice": "Choix multiple",
+  "admin.testDetail.openAnswer": "Réponse ouverte",
+  "admin.testDetail.correctAnswerText": "Texte de la réponse correcte",
+  "admin.testDetail.correctAnswerPlaceholder": "Saisissez la réponse correcte attendue...",
+  "admin.testDetail.setCorrectText": "Enregistrer la réponse correcte",
 
   // Subjects
   "subject.label": "Matière",
