@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
 import { ExcelUploadAndCreate } from "./ExcelUploadAndCreate";
+import { AdminGuide } from "./AdminGuide";
 import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
 
 export default async function AdminTestsPage({
@@ -112,6 +113,9 @@ export default async function AdminTestsPage({
           <p className="text-red-600">{decodeURIComponent(error)}</p>
         </div>
       )}
+
+      {/* Admin Guide */}
+      <AdminGuide />
 
       {/* Excel Upload & Create */}
       <ExcelUploadAndCreate />

@@ -6,6 +6,8 @@ export type ParsedQuestion = {
   prompt: string;
   options: [string, string, string, string];
   correctIndex: number;
+  question_type?: "multiple_choice" | "open_answer";
+  correct_answer_text?: string;
   prompt_ru?: string;
   prompt_en?: string;
   prompt_fr?: string;
@@ -33,6 +35,23 @@ export async function bulkImportQuestionsAction(
   let imported = 0;
 
   for (const q of questions) {
+    if (q.question_type === "open_answer") {
+      const { error: qErr } = await supabase
+        .from("questions")
+        .insert({
+          test_id: testId,
+          prompt: q.prompt,
+          position: nextPos++,
+          question_text_ru: q.prompt_ru ?? null,
+          question_text_en: q.prompt_en ?? null,
+          question_text_fr: q.prompt_fr ?? null,
+          question_type: "open_answer",
+          correct_answer_text: q.correct_answer_text ?? null,
+        });
+      if (!qErr) imported++;
+      continue;
+    }
+
     const { data: qRow, error: qErr } = await supabase
       .from("questions")
       .insert({

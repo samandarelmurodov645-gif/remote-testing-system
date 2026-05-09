@@ -49,23 +49,39 @@ export function ExcelUploadAndCreate() {
 
         for (const rawRow of rows) {
           const row = rawRow as unknown[];
-          if (!row || row.length < 6) continue;
+          if (!row || row.length < 2) continue;
 
           const prompt = String(row[0] ?? "").trim();
-          const opt1 = String(row[1] ?? "").trim();
-          const opt2 = String(row[2] ?? "").trim();
-          const opt3 = String(row[3] ?? "").trim();
-          const opt4 = String(row[4] ?? "").trim();
-          const correctNum = parseInt(String(row[5]), 10);
+          if (!prompt) continue;
 
-          if (!prompt || !opt1 || !opt2 || !opt3 || !opt4) continue;
-          if (isNaN(correctNum) || correctNum < 1 || correctNum > 4) continue;
+          const typeRaw = row.length > 6 ? String(row[6] ?? "").trim().toUpperCase() : "";
+          const isOA = typeRaw === "OA" || typeRaw === "OPEN";
 
-          parsed.push({
-            prompt,
-            options: [opt1, opt2, opt3, opt4],
-            correctIndex: correctNum - 1,
-          });
+          if (isOA) {
+            const correctAnswerText = String(row[5] ?? "").trim();
+            if (!correctAnswerText) continue;
+            parsed.push({
+              prompt,
+              options: ["", "", "", ""],
+              correctIndex: -1,
+              question_type: "open_answer",
+              correct_answer_text: correctAnswerText,
+            });
+          } else {
+            if (row.length < 6) continue;
+            const opt1 = String(row[1] ?? "").trim();
+            const opt2 = String(row[2] ?? "").trim();
+            const opt3 = String(row[3] ?? "").trim();
+            const opt4 = String(row[4] ?? "").trim();
+            const correctNum = parseInt(String(row[5]), 10);
+            if (!opt1 || !opt2 || !opt3 || !opt4) continue;
+            if (isNaN(correctNum) || correctNum < 1 || correctNum > 4) continue;
+            parsed.push({
+              prompt,
+              options: [opt1, opt2, opt3, opt4],
+              correctIndex: correctNum - 1,
+            });
+          }
 
           if (parsed.length >= 25) break;
         }
@@ -331,28 +347,40 @@ export function ExcelUploadAndCreate() {
                       <span className="line-clamp-2">{getQuestionText(q, previewLang)}</span>
                     </td>
                     <td className="px-4 py-2">
-                      <div className="flex flex-wrap gap-1">
-                        {q.options.map((_, j) => {
-                          const optText = getOptionText(q, previewLang, j);
-                          return (
-                            <span
-                              key={j}
-                              className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
-                                j === q.correctIndex
-                                  ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-400"
-                                  : "bg-slate-100 text-slate-600"
-                              }`}
-                            >
-                              {String.fromCharCode(65 + j)}: {optText.length > 15 ? optText.slice(0, 15) + "…" : optText}
-                            </span>
-                          );
-                        })}
-                      </div>
+                      {q.question_type === "open_answer" ? (
+                        <Badge variant="default" size="sm">Open Answer</Badge>
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {q.options.map((_, j) => {
+                            const optText = getOptionText(q, previewLang, j);
+                            return (
+                              <span
+                                key={j}
+                                className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
+                                  j === q.correctIndex
+                                    ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-400"
+                                    : "bg-slate-100 text-slate-600"
+                                }`}
+                              >
+                                {String.fromCharCode(65 + j)}: {optText.length > 15 ? optText.slice(0, 15) + "…" : optText}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-2">
-                      <Badge variant="success" size="sm">
-                        {q.correctIndex + 1}
-                      </Badge>
+                      {q.question_type === "open_answer" ? (
+                        <span className="text-xs text-slate-600 italic line-clamp-1" title={q.correct_answer_text}>
+                          {q.correct_answer_text && q.correct_answer_text.length > 12
+                            ? q.correct_answer_text.slice(0, 12) + "…"
+                            : q.correct_answer_text}
+                        </span>
+                      ) : (
+                        <Badge variant="success" size="sm">
+                          {q.correctIndex + 1}
+                        </Badge>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -48,6 +48,20 @@ export async function bulkCreateTestWithQuestionsAction(
   for (let pos = 0; pos < questions.length; pos++) {
     const q = questions[pos];
 
+    if (q.question_type === "open_answer") {
+      await supabase.from("questions").insert({
+        test_id: testId,
+        prompt: q.prompt,
+        position: pos,
+        question_text_ru: q.prompt_ru ?? null,
+        question_text_en: q.prompt_en ?? null,
+        question_text_fr: q.prompt_fr ?? null,
+        question_type: "open_answer",
+        correct_answer_text: q.correct_answer_text ?? null,
+      });
+      continue;
+    }
+
     const { data: qRow, error: qErr } = await supabase
       .from("questions")
       .insert({
