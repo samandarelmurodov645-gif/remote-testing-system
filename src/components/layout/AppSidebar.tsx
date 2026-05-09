@@ -31,6 +31,11 @@ export function AppSidebar({
   const { t } = useLanguage();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -38,18 +43,19 @@ export function AppSidebar({
 
   const logoGradient =
     role === "admin"
-      ? "from-slate-500 to-slate-700"
-      : "from-indigo-500 to-purple-600";
+      ? "from-violet-500 to-purple-700"
+      : "from-indigo-500 to-cyan-500";
 
   return (
     <>
-      {/* Mobile toggle button */}
+      {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg hover:bg-slate-800 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-40 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-all hover:scale-105"
+        style={{ background: "linear-gradient(135deg, #312e81, #4c1d95)", boxShadow: "0 4px 16px rgba(79,70,229,0.4)" }}
         aria-label="Open menu"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
@@ -57,7 +63,7 @@ export function AppSidebar({
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -65,24 +71,33 @@ export function AppSidebar({
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-64 bg-slate-900 z-50 flex flex-col
+          fixed top-0 left-0 h-full w-64 z-50 flex flex-col
           transform transition-transform duration-300 ease-in-out
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
+        style={{
+          background: "linear-gradient(180deg, #1e1b4b 0%, #2d2a7a 35%, #3b1f6e 65%, #4c1d95 100%)",
+          borderRight: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "4px 0 32px rgba(0,0,0,0.5)",
+        }}
       >
-        {/* Top accent line */}
-        <div className="h-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shrink-0" />
+        {/* Top shimmer accent bar */}
+        <div
+          className="h-0.5 shrink-0"
+          style={{ background: "linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4, #7c3aed, #4f46e5)", backgroundSize: "200% 100%", animation: "gradient-shift 4s linear infinite" }}
+        />
 
         {/* Logo */}
-        <div className="px-5 py-5 border-b border-slate-800">
+        <div className="px-5 py-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
           <Link
             href={logoHref}
             className="flex items-center gap-3 group"
             onClick={() => NProgress.start()}
           >
             <div
-              className={`w-9 h-9 rounded-xl bg-gradient-to-br ${logoGradient} flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform`}
+              className={`w-9 h-9 rounded-xl bg-gradient-to-br ${logoGradient} flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110`}
+              style={{ boxShadow: "0 4px 14px rgba(99,102,241,0.45)" }}
             >
               <span className="text-white font-bold text-lg">{logoLetter}</span>
             </div>
@@ -92,7 +107,7 @@ export function AppSidebar({
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-          {navItems.map((item) => {
+          {navItems.map((item, idx) => {
             const isActive = !!pathname?.startsWith(item.href);
             return (
               <Link
@@ -101,23 +116,35 @@ export function AppSidebar({
                 onClick={() => NProgress.start()}
                 className={[
                   "flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium",
-                  "transition-all duration-150 group relative",
+                  "transition-all duration-200 group relative",
+                  mounted ? "animate-sidebar-in" : "",
                   isActive
-                    ? "bg-indigo-600/90 text-white shadow-md shadow-indigo-900/30"
-                    : "text-slate-400 hover:bg-slate-800/80 hover:text-white",
+                    ? "sidebar-active text-white"
+                    : "text-indigo-200/60 hover:text-white hover:bg-white/8",
                 ].join(" ")}
+                style={{ animationDelay: `${idx * 60}ms` }}
               >
+                {/* Active left accent */}
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-indigo-300 rounded-r-full" />
+                  <span
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r-full"
+                    style={{ background: "linear-gradient(180deg, #818cf8, #06b6d4)" }}
+                  />
                 )}
-                <span
-                  className={`shrink-0 ${isActive ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`}
-                >
+
+                {/* Icon */}
+                <span className={`shrink-0 transition-all duration-200 ${isActive ? "text-indigo-300" : "text-indigo-400/50 group-hover:text-indigo-300 group-hover:scale-110"}`}>
                   {item.icon}
                 </span>
+
                 <span>{t(item.labelKey)}</span>
+
+                {/* Active dot */}
                 {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-200/80 shrink-0" />
+                  <span
+                    className="ml-auto w-1.5 h-1.5 rounded-full shrink-0 animate-pulse"
+                    style={{ background: "#06b6d4" }}
+                  />
                 )}
               </Link>
             );
@@ -125,29 +152,22 @@ export function AppSidebar({
         </nav>
 
         {/* Bottom: Language + Logout */}
-        <div className="p-3 border-t border-slate-800 space-y-1">
-          <LanguageSwitcher />
-          <form action="/logout" method="post">
-            <button
-              type="submit"
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/80 hover:text-red-400 transition-all group"
-            >
-              <svg
-                className="w-4 h-4 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <div className="space-y-1">
+            <LanguageSwitcher />
+            <form action="/logout" method="post">
+              <button
+                type="submit"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-indigo-200/50 hover:bg-red-500/15 hover:text-red-300 transition-all group"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-              {t("nav.logout")}
-            </button>
-          </form>
+                <svg className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                {t("nav.logout")}
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
     </>

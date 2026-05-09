@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "bordered" | "elevated";
+  variant?: "default" | "bordered" | "elevated" | "glass" | "glass-dark";
   padding?: "none" | "sm" | "md" | "lg";
 }
 
@@ -13,10 +13,16 @@ export function Card({
   ...props
 }: CardProps) {
   const variants = {
-    default: "bg-white rounded-2xl",
-    bordered: "bg-white rounded-2xl border border-slate-200",
+    default:
+      "bg-white rounded-2xl shadow-sm border border-slate-200/60",
+    bordered:
+      "bg-white rounded-2xl border border-slate-200",
     elevated:
-      "bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200",
+      "bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300",
+    glass:
+      "glass rounded-2xl border border-white/10 glow-on-hover",
+    "glass-dark":
+      "glass-dark rounded-2xl border border-white/6",
   };
 
   const paddings = {
