@@ -11,6 +11,7 @@ const createTestSchema = z.object({
   description: z.string().optional(),
   time_limit_seconds: z.coerce.number().int().positive(),
   max_attempts: z.coerce.number().int().min(1),
+  subject: z.string().min(1).default("General"),
 });
 
 export async function createTestAction(formData: FormData) {
@@ -21,6 +22,7 @@ export async function createTestAction(formData: FormData) {
     description: (formData.get("description") as string | null) ?? undefined,
     time_limit_seconds: formData.get("time_limit_seconds"),
     max_attempts: formData.get("max_attempts"),
+    subject: (formData.get("subject") as string | null) ?? "General",
   });
 
   if (!parsed.success) {
@@ -36,6 +38,7 @@ export async function createTestAction(formData: FormData) {
     description: parsed.data.description ?? null,
     time_limit_seconds: parsed.data.time_limit_seconds,
     max_attempts: parsed.data.max_attempts,
+    subject: parsed.data.subject,
     created_by: userData.user.id,
     published: false,
   });

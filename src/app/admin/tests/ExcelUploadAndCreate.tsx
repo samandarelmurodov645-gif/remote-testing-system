@@ -6,6 +6,7 @@ import { Button, Card, Badge } from "@/components/ui";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { bulkCreateTestWithQuestionsAction } from "./bulkImportAction";
 import type { ParsedQuestion } from "./[testId]/bulkImportAction";
+import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
 
 export function ExcelUploadAndCreate() {
   const { t } = useLanguage();
@@ -15,6 +16,7 @@ export function ExcelUploadAndCreate() {
   const [questions, setQuestions] = useState<ParsedQuestion[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [subject, setSubject] = useState("General");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const parseFile = useCallback(
@@ -92,7 +94,7 @@ export function ExcelUploadAndCreate() {
     const title = fileName.replace(/\.(xlsx|csv)$/i, "");
 
     try {
-      const result = await bulkCreateTestWithQuestionsAction(title, questions);
+      const result = await bulkCreateTestWithQuestionsAction(title, questions, subject);
       if (result.ok) {
         router.push(`/admin/tests/${result.testId}`);
       } else {
@@ -271,6 +273,26 @@ export function ExcelUploadAndCreate() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* Subject picker */}
+      {questions.length > 0 && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            {t("subject.label")} <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white text-slate-900"
+          >
+            {SUBJECTS.map((s) => (
+              <option key={s} value={s}>
+                {SUBJECT_EMOJI[s]} {t(`subject.${s}`)}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 

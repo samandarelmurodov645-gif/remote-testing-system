@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
 import { ExcelUploadAndCreate } from "./ExcelUploadAndCreate";
+import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
 
 export default async function AdminTestsPage({
   searchParams,
@@ -17,7 +18,7 @@ export default async function AdminTestsPage({
 
   const { data: tests } = await supabase
     .from("tests")
-    .select("id,title,published,time_limit_seconds,max_attempts,created_at")
+    .select("id,title,published,time_limit_seconds,max_attempts,subject,created_at")
     .order("created_at", { ascending: false });
 
   // Stats
@@ -121,6 +122,22 @@ export default async function AdminTestsPage({
         <form action={createTestAction} className="space-y-4">
           <Input name="title" label={t("common.testName")} placeholder={t("common.testNamePlaceholder")} required />
           <Textarea name="description" label={t("common.description")} placeholder={t("common.descriptionPlaceholder")} rows={3} />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              {t("subject.label")} <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="subject"
+              defaultValue="General"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white text-slate-900"
+            >
+              {SUBJECTS.map((s) => (
+                <option key={s} value={s}>
+                  {SUBJECT_EMOJI[s]} {t(`subject.${s}`)}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="grid md:grid-cols-2 gap-4">
             <Input name="time_limit_seconds" type="number" label={t("common.timeLimit")} placeholder="600" min={1} defaultValue={600} required />
             <Input name="max_attempts" type="number" label={t("common.maxAttempts")} placeholder="1" min={1} defaultValue={1} required />
@@ -141,6 +158,7 @@ export default async function AdminTestsPage({
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
                 <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">{t("admin.tests.name")}</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">{t("subject.label")}</th>
                 <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">{t("admin.tests.status")}</th>
                 <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">{t("admin.tests.timeLimit")}</th>
                 <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">{t("admin.tests.maxAttempts")}</th>
@@ -154,6 +172,9 @@ export default async function AdminTestsPage({
                     <Link className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline" href={`/admin/tests/${test.id}`}>
                       {test.title}
                     </Link>
+                  </td>
+                  <td className="px-6 py-4 text-slate-600 text-sm whitespace-nowrap">
+                    {SUBJECT_EMOJI[test.subject ?? "General"]} {t(`subject.${test.subject ?? "General"}`)}
                   </td>
                   <td className="px-6 py-4">
                     {test.published ? (
@@ -179,7 +200,7 @@ export default async function AdminTestsPage({
               ))}
               {(!tests || tests.length === 0) && (
                 <tr>
-                  <td className="px-6 py-12 text-center text-slate-500" colSpan={5}>
+                  <td className="px-6 py-12 text-center text-slate-500" colSpan={6}>
                     <div className="flex flex-col items-center">
                       <svg className="w-12 h-12 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

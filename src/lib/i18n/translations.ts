@@ -410,6 +410,24 @@ const uz: TranslationMap = {
   "attempt.result.tryAgain": "Qayta urinish",
   "attempt.result.attemptsLeft": "urinish qoldi",
   "attempt.result.question": "Savol",
+
+  // Subjects
+  "subject.label": "Fan",
+  "subject.placeholder": "Fanni tanlang",
+  "subject.allTests": "Barcha testlar",
+  "subject.backToSubjects": "Fanlarga qaytish",
+  "subject.testsCount": "ta test",
+  "subject.noTests": "Bu fanda testlar mavjud emas",
+  "subject.Mathematics": "Matematika",
+  "subject.Physics": "Fizika",
+  "subject.Chemistry": "Kimyo",
+  "subject.Biology": "Biologiya",
+  "subject.History": "Tarix",
+  "subject.Geography": "Geografiya",
+  "subject.Literature": "Adabiyot",
+  "subject.English": "Ingliz tili",
+  "subject.Computer Science": "Informatika",
+  "subject.General": "Umumiy",
 };
 
 const en: TranslationMap = {
@@ -789,6 +807,24 @@ const en: TranslationMap = {
   "attempt.result.tryAgain": "Try Again",
   "attempt.result.attemptsLeft": "attempts left",
   "attempt.result.question": "Question",
+
+  // Subjects
+  "subject.label": "Subject",
+  "subject.placeholder": "Select subject",
+  "subject.allTests": "All Tests",
+  "subject.backToSubjects": "Back to Subjects",
+  "subject.testsCount": "tests",
+  "subject.noTests": "No tests available in this subject",
+  "subject.Mathematics": "Mathematics",
+  "subject.Physics": "Physics",
+  "subject.Chemistry": "Chemistry",
+  "subject.Biology": "Biology",
+  "subject.History": "History",
+  "subject.Geography": "Geography",
+  "subject.Literature": "Literature",
+  "subject.English": "English",
+  "subject.Computer Science": "Computer Science",
+  "subject.General": "General",
 };
 
 const ru: TranslationMap = {
@@ -1166,6 +1202,24 @@ const ru: TranslationMap = {
   "attempt.result.tryAgain": "Попробовать снова",
   "attempt.result.attemptsLeft": "попыток осталось",
   "attempt.result.question": "Вопрос",
+
+  // Subjects
+  "subject.label": "Предмет",
+  "subject.placeholder": "Выберите предмет",
+  "subject.allTests": "Все тесты",
+  "subject.backToSubjects": "К предметам",
+  "subject.testsCount": "тестов",
+  "subject.noTests": "В этом предмете нет тестов",
+  "subject.Mathematics": "Математика",
+  "subject.Physics": "Физика",
+  "subject.Chemistry": "Химия",
+  "subject.Biology": "Биология",
+  "subject.History": "История",
+  "subject.Geography": "География",
+  "subject.Literature": "Литература",
+  "subject.English": "Английский",
+  "subject.Computer Science": "Информатика",
+  "subject.General": "Общее",
 };
 
 const fr: TranslationMap = {
@@ -1549,6 +1603,24 @@ const fr: TranslationMap = {
   "attempt.result.tryAgain": "Réessayer",
   "attempt.result.attemptsLeft": "tentatives restantes",
   "attempt.result.question": "Question",
+
+  // Subjects
+  "subject.label": "Matière",
+  "subject.placeholder": "Choisir une matière",
+  "subject.allTests": "Tous les tests",
+  "subject.backToSubjects": "Retour aux matières",
+  "subject.testsCount": "tests",
+  "subject.noTests": "Aucun test disponible dans cette matière",
+  "subject.Mathematics": "Mathématiques",
+  "subject.Physics": "Physique",
+  "subject.Chemistry": "Chimie",
+  "subject.Biology": "Biologie",
+  "subject.History": "Histoire",
+  "subject.Geography": "Géographie",
+  "subject.Literature": "Littérature",
+  "subject.English": "Anglais",
+  "subject.Computer Science": "Informatique",
+  "subject.General": "Général",
 };
 
 export const translations: Record<Lang, TranslationMap> = { uz, en, ru, fr };

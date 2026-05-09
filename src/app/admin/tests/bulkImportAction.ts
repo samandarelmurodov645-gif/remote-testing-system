@@ -9,7 +9,8 @@ export type { ParsedQuestion };
 
 export async function bulkCreateTestWithQuestionsAction(
   title: string,
-  questions: ParsedQuestion[]
+  questions: ParsedQuestion[],
+  subject: string = "General"
 ): Promise<{ ok: true; testId: string } | { ok: false; error: string }> {
   try {
     await requireRole("admin");
@@ -31,6 +32,7 @@ export async function bulkCreateTestWithQuestionsAction(
       title: title.trim(),
       time_limit_seconds: 1800,
       max_attempts: 3,
+      subject,
       created_by: userData.user.id,
       published: false,
     })
