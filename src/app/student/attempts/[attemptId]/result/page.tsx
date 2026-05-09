@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { Button, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
 
@@ -11,19 +12,28 @@ export default async function AttemptResultPage({
 }) {
   const { attemptId } = await params;
   const supabase = await createSupabaseServerClient();
+  const service = createSupabaseServiceClient();
   const t = await getServerT();
+
+  // Verify the current user owns this attempt
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) notFound();
 
   const { data: attempt } = await supabase
     .from("attempts")
     .select("id,test_id,status,score,answers,finished_at")
     .eq("id", attemptId)
+    .eq("student_id", userData.user.id)
     .maybeSingle();
 
   if (!attempt || (attempt.status !== "submitted" && attempt.status !== "expired")) {
     notFound();
   }
 
-  const { data: test } = await supabase
+  // Use service client for test/questions/options/correct_options so results
+  // remain readable even if a test is later unpublished, and to bypass the
+  // correct_options RLS that restricts reads to admins only.
+  const { data: test } = await service
     .from("tests")
     .select("id,title,max_attempts")
     .eq("id", attempt.test_id)
@@ -31,7 +41,7 @@ export default async function AttemptResultPage({
 
   if (!test) notFound();
 
-  const { data: questions } = await supabase
+  const { data: questions } = await service
     .from("questions")
     .select("id,prompt,position")
     .eq("test_id", attempt.test_id)
@@ -42,22 +52,24 @@ export default async function AttemptResultPage({
   const [{ data: options }, { data: correctOptions }, { count: totalAttempts }] =
     await Promise.all([
       questionIds.length
-        ? supabase
+        ? service
             .from("options")
             .select("id,question_id,text,position")
             .in("question_id", questionIds)
             .order("position", { ascending: true })
         : Promise.resolve({ data: [] as Array<{ id: string; question_id: string; text: string; position: number }> }),
       questionIds.length
-        ? supabase
+        ? service
             .from("correct_options")
             .select("question_id,option_id")
             .in("question_id", questionIds)
         : Promise.resolve({ data: [] as Array<{ question_id: string; option_id: string }> }),
+      // RLS automatically scopes this to the current student's attempts
       supabase
         .from("attempts")
         .select("*", { count: "exact", head: true })
-        .eq("test_id", attempt.test_id),
+        .eq("test_id", attempt.test_id)
+        .eq("student_id", userData.user.id),
     ]);
 
   const optionsByQuestion = new Map<
