@@ -4,12 +4,14 @@ import { useState, useRef } from "react";
 import { Button, Card, Badge } from "@/components/ui";
 import { bulkImportQuestionsAction, type ParsedQuestion } from "./bulkImportAction";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { translateBatch } from "@/lib/translate";
 
 export function ExcelImport({ testId }: { testId: string }) {
   const { t } = useLanguage();
   const [questions, setQuestions] = useState<ParsedQuestion[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
+  const [translating, setTranslating] = useState(false);
   const [importedCount, setImportedCount] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -56,8 +58,31 @@ export function ExcelImport({ testId }: { testId: string }) {
         return;
       }
 
-      setQuestions(parsed);
+      // Translate all prompts and options in parallel for all 3 target languages
+      setTranslating(true);
+      const flat = parsed.flatMap((q) => [q.prompt, ...q.options]);
+      const [flatRu, flatEn, flatFr] = await Promise.all([
+        translateBatch(flat, "uz", "ru"),
+        translateBatch(flat, "uz", "en"),
+        translateBatch(flat, "uz", "fr"),
+      ]);
+      const translated = parsed.map((q, i) => {
+        const base = i * 5;
+        return {
+          ...q,
+          prompt_ru: flatRu[base],
+          options_ru: [flatRu[base + 1], flatRu[base + 2], flatRu[base + 3], flatRu[base + 4]] as [string, string, string, string],
+          prompt_en: flatEn[base],
+          options_en: [flatEn[base + 1], flatEn[base + 2], flatEn[base + 3], flatEn[base + 4]] as [string, string, string, string],
+          prompt_fr: flatFr[base],
+          options_fr: [flatFr[base + 1], flatFr[base + 2], flatFr[base + 3], flatFr[base + 4]] as [string, string, string, string],
+        };
+      });
+      setTranslating(false);
+
+      setQuestions(translated);
     } catch {
+      setTranslating(false);
       setError(t("excel.errorParsing"));
     }
 
@@ -177,12 +202,24 @@ export function ExcelImport({ testId }: { testId: string }) {
           onChange={handleFileChange}
           className="hidden"
         />
-        <Button variant="secondary" onClick={() => fileRef.current?.click()}>
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-          </svg>
-          {t("excel.uploadBtn")}
+        <Button variant="secondary" onClick={() => !translating && fileRef.current?.click()} disabled={translating}>
+          {translating ? (
+            <>
+              <svg className="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              {t("excel.translating")}
+            </>
+          ) : (
+            <>
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              {t("excel.uploadBtn")}
+            </>
+          )}
         </Button>
         {questions.length > 0 && (
           <Badge variant="info">
@@ -265,7 +302,7 @@ export function ExcelImport({ testId }: { testId: string }) {
           variant="primary"
           size="lg"
           onClick={handleImport}
-          disabled={importing}
+          disabled={importing || translating}
         >
           {importing ? (
             <>
