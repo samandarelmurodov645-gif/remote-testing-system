@@ -7,6 +7,16 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { bulkCreateTestWithQuestionsAction } from "./bulkImportAction";
 import type { ParsedQuestion } from "./[testId]/bulkImportAction";
 import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
+import { translateBatch } from "@/lib/translate";
+
+type PreviewLang = "uz" | "ru" | "en" | "fr";
+
+const PREVIEW_LANGS: Array<{ code: PreviewLang; label: string; flag: string }> = [
+  { code: "uz", label: "O'zbek", flag: "🇺🇿" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+];
 
 export function ExcelUploadAndCreate() {
   const { t } = useLanguage();
@@ -16,7 +26,9 @@ export function ExcelUploadAndCreate() {
   const [questions, setQuestions] = useState<ParsedQuestion[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [translating, setTranslating] = useState(false);
   const [subject, setSubject] = useState("General");
+  const [previewLang, setPreviewLang] = useState<PreviewLang>("uz");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const parseFile = useCallback(
@@ -24,6 +36,7 @@ export function ExcelUploadAndCreate() {
       setError(null);
       setQuestions([]);
       setFileName(file.name);
+      setPreviewLang("uz");
 
       try {
         const XLSX = await import("xlsx");
@@ -62,8 +75,35 @@ export function ExcelUploadAndCreate() {
           return;
         }
 
-        setQuestions(parsed);
+        // Start translation
+        setTranslating(true);
+
+        // Flatten: [q0.prompt, q0.opt1, q0.opt2, q0.opt3, q0.opt4, q1.prompt, ...]
+        const flat = parsed.flatMap((q) => [q.prompt, ...q.options]);
+
+        const [flatRu, flatEn, flatFr] = await Promise.all([
+          translateBatch(flat, "uz", "ru"),
+          translateBatch(flat, "uz", "en"),
+          translateBatch(flat, "uz", "fr"),
+        ]);
+
+        const translated = parsed.map((q, i) => {
+          const base = i * 5;
+          return {
+            ...q,
+            prompt_ru: flatRu[base],
+            options_ru: [flatRu[base + 1], flatRu[base + 2], flatRu[base + 3], flatRu[base + 4]] as [string, string, string, string],
+            prompt_en: flatEn[base],
+            options_en: [flatEn[base + 1], flatEn[base + 2], flatEn[base + 3], flatEn[base + 4]] as [string, string, string, string],
+            prompt_fr: flatFr[base],
+            options_fr: [flatFr[base + 1], flatFr[base + 2], flatFr[base + 3], flatFr[base + 4]] as [string, string, string, string],
+          };
+        });
+
+        setQuestions(translated);
+        setTranslating(false);
       } catch {
+        setTranslating(false);
         setError(t("excel.errorParsing"));
       }
     },
@@ -107,6 +147,20 @@ export function ExcelUploadAndCreate() {
     }
   };
 
+  const getQuestionText = (q: ParsedQuestion, lang: PreviewLang): string => {
+    if (lang === "ru") return q.prompt_ru ?? q.prompt;
+    if (lang === "en") return q.prompt_en ?? q.prompt;
+    if (lang === "fr") return q.prompt_fr ?? q.prompt;
+    return q.prompt;
+  };
+
+  const getOptionText = (q: ParsedQuestion, lang: PreviewLang, idx: number): string => {
+    if (lang === "ru") return q.options_ru?.[idx] ?? q.options[idx];
+    if (lang === "en") return q.options_en?.[idx] ?? q.options[idx];
+    if (lang === "fr") return q.options_fr?.[idx] ?? q.options[idx];
+    return q.options[idx];
+  };
+
   return (
     <Card variant="bordered" padding="lg" className="mb-8">
       <div className="flex items-center gap-2 mb-1">
@@ -131,19 +185,32 @@ export function ExcelUploadAndCreate() {
             className="hidden"
           />
           <div
-            onClick={() => fileRef.current?.click()}
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onClick={() => !translating && fileRef.current?.click()}
+            onDragOver={(e) => { e.preventDefault(); if (!translating) setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`cursor-pointer border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors ${
-              isDragging
-                ? "border-indigo-400 bg-indigo-50"
+            className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors ${
+              translating
+                ? "border-indigo-300 bg-indigo-50 cursor-wait"
+                : isDragging
+                ? "border-indigo-400 bg-indigo-50 cursor-pointer"
                 : fileName && questions.length > 0
-                ? "border-emerald-400 bg-emerald-50"
-                : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
+                ? "border-emerald-400 bg-emerald-50 cursor-pointer"
+                : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50 cursor-pointer"
             }`}
           >
-            {fileName && questions.length > 0 ? (
+            {translating ? (
+              <>
+                <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-3">
+                  <svg className="w-6 h-6 text-indigo-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-indigo-700">{t("excel.translating")}</p>
+                <p className="text-xs text-slate-500 mt-1">{fileName}</p>
+              </>
+            ) : fileName && questions.length > 0 ? (
               <>
                 <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
                   <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,10 +292,26 @@ export function ExcelUploadAndCreate() {
       {/* Preview */}
       {questions.length > 0 && (
         <div className="border border-slate-200 rounded-xl overflow-hidden mb-4">
-          <div className="bg-slate-50 px-4 py-3 border-b border-slate-200">
+          <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-3">
             <h3 className="font-medium text-slate-900 text-sm">
               {t("excel.previewTitle")} — {questions.length} {t("excel.questionsFound")}
             </h3>
+            {/* Language tabs */}
+            <div className="flex items-center gap-1">
+              {PREVIEW_LANGS.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => setPreviewLang(lang.code)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                    previewLang === lang.code
+                      ? "bg-indigo-600 text-white"
+                      : "bg-white border border-slate-200 text-slate-600 hover:border-indigo-300"
+                  }`}
+                >
+                  {lang.flag} {lang.label}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="max-h-72 overflow-y-auto">
             <table className="w-full text-sm">
@@ -245,22 +328,25 @@ export function ExcelUploadAndCreate() {
                   <tr key={i} className="hover:bg-slate-50">
                     <td className="px-4 py-2 text-slate-400 text-xs">{i + 1}</td>
                     <td className="px-4 py-2 text-slate-900 max-w-xs">
-                      <span className="line-clamp-2">{q.prompt}</span>
+                      <span className="line-clamp-2">{getQuestionText(q, previewLang)}</span>
                     </td>
                     <td className="px-4 py-2">
                       <div className="flex flex-wrap gap-1">
-                        {q.options.map((o, j) => (
-                          <span
-                            key={j}
-                            className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
-                              j === q.correctIndex
-                                ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-400"
-                                : "bg-slate-100 text-slate-600"
-                            }`}
-                          >
-                            {String.fromCharCode(65 + j)}: {o.length > 15 ? o.slice(0, 15) + "…" : o}
-                          </span>
-                        ))}
+                        {q.options.map((_, j) => {
+                          const optText = getOptionText(q, previewLang, j);
+                          return (
+                            <span
+                              key={j}
+                              className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
+                                j === q.correctIndex
+                                  ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-400"
+                                  : "bg-slate-100 text-slate-600"
+                              }`}
+                            >
+                              {String.fromCharCode(65 + j)}: {optText.length > 15 ? optText.slice(0, 15) + "…" : optText}
+                            </span>
+                          );
+                        })}
                       </div>
                     </td>
                     <td className="px-4 py-2">

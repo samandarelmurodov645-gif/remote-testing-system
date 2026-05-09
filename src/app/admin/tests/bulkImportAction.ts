@@ -50,7 +50,14 @@ export async function bulkCreateTestWithQuestionsAction(
 
     const { data: qRow, error: qErr } = await supabase
       .from("questions")
-      .insert({ test_id: testId, prompt: q.prompt, position: pos })
+      .insert({
+        test_id: testId,
+        prompt: q.prompt,
+        position: pos,
+        question_text_ru: q.prompt_ru ?? null,
+        question_text_en: q.prompt_en ?? null,
+        question_text_fr: q.prompt_fr ?? null,
+      })
       .select("id")
       .single();
 
@@ -60,6 +67,9 @@ export async function bulkCreateTestWithQuestionsAction(
       question_id: qRow.id,
       text,
       position: i,
+      option_text_ru: q.options_ru?.[i] ?? null,
+      option_text_en: q.options_en?.[i] ?? null,
+      option_text_fr: q.options_fr?.[i] ?? null,
     }));
 
     const { data: insertedOptions, error: optErr } = await supabase

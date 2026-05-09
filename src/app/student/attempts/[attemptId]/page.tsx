@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import AttemptRunner from "./AttemptRunner";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { getServerT } from "@/lib/i18n";
+import { getServerT, getLang } from "@/lib/i18n";
 import { Button, Card } from "@/components/ui";
 
 export default async function StudentAttemptPage({
@@ -12,7 +12,7 @@ export default async function StudentAttemptPage({
 }) {
   const { attemptId } = await params;
   const supabase = await createSupabaseServerClient();
-  const t = await getServerT();
+  const [t, lang] = await Promise.all([getServerT(), getLang()]);
 
   const { data: attempt } = await supabase
     .from("attempts")
@@ -63,7 +63,7 @@ export default async function StudentAttemptPage({
 
   const { data: questions } = await supabase
     .from("questions")
-    .select("id,prompt,position")
+    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
@@ -72,33 +72,50 @@ export default async function StudentAttemptPage({
     id: string;
     question_id: string;
     text: string;
+    option_text_ru: string | null;
+    option_text_en: string | null;
+    option_text_fr: string | null;
     position: number;
   }> = questionIds.length
     ? (
         await supabase
           .from("options")
-          .select("id,question_id,text,position")
+          .select("id,question_id,text,option_text_ru,option_text_en,option_text_fr,position")
           .in("question_id", questionIds)
           .order("position", { ascending: true })
       ).data ?? []
     : [];
 
-  const optionsByQuestion = new Map<
-    string,
-    Array<{ id: string; question_id: string; text: string; position: number }>
-  >();
+  const optionsByQuestion = new Map<string, typeof options>();
   options.forEach((o) => {
     const arr = optionsByQuestion.get(o.question_id) ?? [];
     arr.push(o);
     optionsByQuestion.set(o.question_id, arr);
   });
 
+  type QRow = { prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null };
+  type ORow = { text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null };
+
+  const localizeQ = (q: QRow) => {
+    if (lang === "ru") return q.question_text_ru ?? q.prompt;
+    if (lang === "en") return q.question_text_en ?? q.prompt;
+    if (lang === "fr") return q.question_text_fr ?? q.prompt;
+    return q.prompt;
+  };
+
+  const localizeO = (o: ORow) => {
+    if (lang === "ru") return o.option_text_ru ?? o.text;
+    if (lang === "en") return o.option_text_en ?? o.text;
+    if (lang === "fr") return o.option_text_fr ?? o.text;
+    return o.text;
+  };
+
   const runnerQuestions = (questions ?? []).map((q) => ({
     id: q.id,
-    prompt: q.prompt,
+    prompt: localizeQ(q),
     options: (optionsByQuestion.get(q.id) ?? []).map((o) => ({
       id: o.id,
-      text: o.text,
+      text: localizeO(o),
     })),
   }));
 

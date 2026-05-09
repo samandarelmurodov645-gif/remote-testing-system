@@ -399,6 +399,8 @@ const uz: TranslationMap = {
   "excel.create.rule4": "Fayl nomi test nomi sifatida ishlatiladi",
   "excel.create.confirmBtn": "Test yaratish va savollarni import qilish",
   "excel.create.creating": "Test yaratilmoqda...",
+  "excel.translating": "Savollar tarjima qilinmoqda...",
+  "excel.previewLang": "Ko'rib chiqish tili",
 
   // Attempt result
   "attempt.result.title": "Test natijalari",
@@ -796,6 +798,8 @@ const en: TranslationMap = {
   "excel.create.rule4": "File name will be used as test title",
   "excel.create.confirmBtn": "Create Test & Import Questions",
   "excel.create.creating": "Creating test...",
+  "excel.translating": "Translating questions...",
+  "excel.previewLang": "Preview language",
 
   // Attempt result
   "attempt.result.title": "Test Result",
@@ -1191,6 +1195,8 @@ const ru: TranslationMap = {
   "excel.create.rule4": "Имя файла будет использоваться как название теста",
   "excel.create.confirmBtn": "Создать тест и импортировать вопросы",
   "excel.create.creating": "Создание теста...",
+  "excel.translating": "Перевод вопросов...",
+  "excel.previewLang": "Язык просмотра",
 
   // Attempt result
   "attempt.result.title": "Результат теста",
@@ -1592,6 +1598,8 @@ const fr: TranslationMap = {
   "excel.create.rule4": "Le nom du fichier sera utilisé comme titre du test",
   "excel.create.confirmBtn": "Créer le test et importer les questions",
   "excel.create.creating": "Création du test...",
+  "excel.translating": "Traduction des questions...",
+  "excel.previewLang": "Langue d'aperçu",
 
   // Attempt result
   "attempt.result.title": "Résultat du test",

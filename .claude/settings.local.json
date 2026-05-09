@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(findstr /R \"t\\(\\\\\"home\\\\.goTo\" src\\\\app\\\\page.tsx)"
+      "Bash(findstr /R \"t\\(\\\\\"home\\\\.goTo\" src\\\\app\\\\page.tsx)",
+      "Bash(npx tsc *)"
     ]
   }
 }

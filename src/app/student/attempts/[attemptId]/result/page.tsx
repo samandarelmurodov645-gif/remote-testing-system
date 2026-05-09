@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { Button, Badge } from "@/components/ui";
-import { getServerT } from "@/lib/i18n";
+import { getServerT, getLang } from "@/lib/i18n";
 
 export default async function AttemptResultPage({
   params,
@@ -13,7 +13,7 @@ export default async function AttemptResultPage({
   const { attemptId } = await params;
   const supabase = await createSupabaseServerClient();
   const service = createSupabaseServiceClient();
-  const t = await getServerT();
+  const [t, lang] = await Promise.all([getServerT(), getLang()]);
 
   // Verify the current user owns this attempt
   const { data: userData } = await supabase.auth.getUser();
@@ -43,7 +43,7 @@ export default async function AttemptResultPage({
 
   const { data: questions } = await service
     .from("questions")
-    .select("id,prompt,position")
+    .select("id,prompt,question_text_ru,question_text_en,question_text_fr,position")
     .eq("test_id", attempt.test_id)
     .order("position", { ascending: true });
 
@@ -54,10 +54,10 @@ export default async function AttemptResultPage({
       questionIds.length
         ? service
             .from("options")
-            .select("id,question_id,text,position")
+            .select("id,question_id,text,option_text_ru,option_text_en,option_text_fr,position")
             .in("question_id", questionIds)
             .order("position", { ascending: true })
-        : Promise.resolve({ data: [] as Array<{ id: string; question_id: string; text: string; position: number }> }),
+        : Promise.resolve({ data: [] as Array<{ id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number }> }),
       questionIds.length
         ? service
             .from("correct_options")
@@ -72,15 +72,30 @@ export default async function AttemptResultPage({
         .eq("student_id", userData.user.id),
     ]);
 
-  const optionsByQuestion = new Map<
-    string,
-    Array<{ id: string; text: string; position: number }>
-  >();
+  type OptionRow = { id: string; question_id: string; text: string; option_text_ru: string | null; option_text_en: string | null; option_text_fr: string | null; position: number };
+
+  const optionsByQuestion = new Map<string, Array<OptionRow>>();
   (options ?? []).forEach((o) => {
     const arr = optionsByQuestion.get(o.question_id) ?? [];
-    arr.push(o);
+    arr.push(o as OptionRow);
     optionsByQuestion.set(o.question_id, arr);
   });
+
+  type QuestionRow = { id: string; prompt: string; question_text_ru: string | null; question_text_en: string | null; question_text_fr: string | null; position: number };
+
+  const localizeQ = (q: QuestionRow) => {
+    if (lang === "ru") return q.question_text_ru ?? q.prompt;
+    if (lang === "en") return q.question_text_en ?? q.prompt;
+    if (lang === "fr") return q.question_text_fr ?? q.prompt;
+    return q.prompt;
+  };
+
+  const localizeO = (o: OptionRow) => {
+    if (lang === "ru") return o.option_text_ru ?? o.text;
+    if (lang === "en") return o.option_text_en ?? o.text;
+    if (lang === "fr") return o.option_text_fr ?? o.text;
+    return o.text;
+  };
 
   const correctByQuestion = new Map<string, string>();
   (correctOptions ?? []).forEach((co) => {
@@ -205,7 +220,7 @@ export default async function AttemptResultPage({
                   <p className="text-xs font-medium text-slate-400 mb-0.5">
                     {t("attempt.result.question")} {idx + 1}
                   </p>
-                  <p className="text-base font-medium text-slate-900">{q.prompt}</p>
+                  <p className="text-base font-medium text-slate-900">{localizeQ(q as QuestionRow)}</p>
                 </div>
               </div>
 
@@ -260,7 +275,7 @@ export default async function AttemptResultPage({
                             : "text-slate-700"
                         }`}
                       >
-                        {o.text}
+                        {localizeO(o as OptionRow)}
                       </span>
                       {isCorrectOpt && (
                         <span className="text-xs font-semibold text-emerald-600 shrink-0 whitespace-nowrap">

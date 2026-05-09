@@ -6,6 +6,12 @@ export type ParsedQuestion = {
   prompt: string;
   options: [string, string, string, string];
   correctIndex: number;
+  prompt_ru?: string;
+  prompt_en?: string;
+  prompt_fr?: string;
+  options_ru?: [string, string, string, string];
+  options_en?: [string, string, string, string];
+  options_fr?: [string, string, string, string];
 };
 
 export async function bulkImportQuestionsAction(
