@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import AttemptRunner from "./AttemptRunner";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getServerT } from "@/lib/i18n";
@@ -36,19 +37,7 @@ export default async function StudentAttemptPage({
   }
 
   if (attempt.status !== "in_progress") {
-    return (
-      <div className="max-w-md mx-auto mt-8">
-        <Card variant="bordered" padding="lg">
-          <div className="text-center py-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">{t("attempt.completed")}</h2>
-            <p className="text-slate-600 mb-6">{t("attempt.submitted")}</p>
-            <Link href="/student/results">
-              <Button variant="primary">{t("student.results.backToTests")}</Button>
-            </Link>
-          </div>
-        </Card>
-      </div>
-    );
+    redirect(`/student/attempts/${attemptId}/result`);
   }
 
   const { data: test } = await supabase

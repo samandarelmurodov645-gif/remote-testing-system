@@ -14,18 +14,46 @@ export default async function StudentResultsPage() {
     .order("started_at", { ascending: false });
 
   const testIds = Array.from(new Set((attempts ?? []).map((a) => a.test_id)));
-  const tests: Array<{ id: string; title: string }> = testIds.length
-    ? (await supabase.from("tests").select("id,title").in("id", testIds)).data ?? []
-    : [];
+
+  const [tests, allQuestions] = await Promise.all([
+    testIds.length
+      ? supabase.from("tests").select("id,title").in("id", testIds).then((r) => r.data ?? [])
+      : Promise.resolve([] as Array<{ id: string; title: string }>),
+    testIds.length
+      ? supabase
+          .from("questions")
+          .select("test_id")
+          .in("test_id", testIds)
+          .then((r) => r.data ?? [])
+      : Promise.resolve([] as Array<{ test_id: string }>),
+  ]);
 
   const titleById = new Map<string, string>();
   tests.forEach((t) => titleById.set(t.id, t.title));
 
-  const completedCount = (attempts ?? []).filter((a) => a.status === "submitted" || a.status === "expired").length;
-  const scoredAttempts = (attempts ?? []).filter((a) => a.score !== null);
+  const questionCountByTest = new Map<string, number>();
+  (allQuestions as Array<{ test_id: string }>).forEach((q) => {
+    questionCountByTest.set(q.test_id, (questionCountByTest.get(q.test_id) ?? 0) + 1);
+  });
+
+  function scorePercent(attempt: { score: number | null; test_id: string }): number | null {
+    if (attempt.score === null) return null;
+    const total = questionCountByTest.get(attempt.test_id) ?? 0;
+    if (total === 0) return null;
+    return Math.round((attempt.score / total) * 100);
+  }
+
+  const completedCount = (attempts ?? []).filter(
+    (a) => a.status === "submitted" || a.status === "expired"
+  ).length;
+
+  const scoredPercentages = (attempts ?? [])
+    .map((a) => scorePercent(a))
+    .filter((p): p is number => p !== null);
+
   const avgScore =
-    scoredAttempts.length > 0
-      ? Math.round(scoredAttempts.reduce((sum, a) => sum + (a.score ?? 0), 0) / scoredAttempts.length)
+    scoredPercentages.length > 0
+      ? Math.round(scoredPercentages.reduce((sum, p) => sum + p, 0) / scoredPercentages.length)
       : null;
 
   return (
@@ -49,7 +77,7 @@ export default async function StudentResultsPage() {
           </div>
           {avgScore !== null && (
             <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-              <div className="text-2xl font-bold text-emerald-600">{avgScore}</div>
+              <div className="text-2xl font-bold text-emerald-600">{avgScore}%</div>
               <div className="text-xs text-slate-600 mt-0.5">{t("student.results.avgScore")}</div>
             </div>
           )}
@@ -62,15 +90,14 @@ export default async function StudentResultsPage() {
 
       <div className="grid gap-4">
         {(attempts ?? []).map((a) => {
-          const scorePercent =
-            a.score !== null ? Math.min(100, Math.round(a.score)) : null;
+          const pct = scorePercent(a);
+          const isFinished = a.status === "submitted" || a.status === "expired";
 
-          return (
+          const cardContent = (
             <Card
-              key={a.id}
               variant="bordered"
               padding="lg"
-              className="card-hover"
+              className={isFinished ? "card-hover cursor-pointer" : ""}
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -80,8 +107,10 @@ export default async function StudentResultsPage() {
                   <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
                     <span>{new Date(a.started_at).toLocaleString()}</span>
                     <span className="text-slate-300">•</span>
-                    {(a.status === "submitted" || a.status === "expired") && (
-                      <Badge variant="success" size="sm">{t("attempt.completed")}</Badge>
+                    {isFinished && (
+                      <Badge variant={a.status === "expired" ? "danger" : "success"} size="sm">
+                        {t("attempt.completed")}
+                      </Badge>
                     )}
                     {a.status === "in_progress" && (
                       <Badge variant="warning" size="sm">{t("attempt.inProgress")}</Badge>
@@ -90,24 +119,25 @@ export default async function StudentResultsPage() {
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  {a.score !== null && (
+                  {pct !== null && (
                     <div className="relative w-14 h-14">
                       <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
                         <circle cx="18" cy="18" r="15.5" fill="none" stroke="#e2e8f0" strokeWidth="3" />
                         <circle
                           cx="18" cy="18" r="15.5" fill="none"
-                          stroke="#4f46e5" strokeWidth="3"
-                          strokeDasharray={`${(scorePercent ?? 0) * 0.974} 97.4`}
+                          stroke={pct >= 70 ? "#10b981" : pct >= 40 ? "#f59e0b" : "#ef4444"}
+                          strokeWidth="3"
+                          strokeDasharray={`${pct * 0.974} 97.4`}
                           strokeLinecap="round"
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-bold text-slate-900">{a.score}</span>
+                        <span className="text-xs font-bold text-slate-900">{pct}%</span>
                       </div>
                     </div>
                   )}
                   {a.status === "in_progress" && (
-                    <Link href={`/student/attempts/${a.id}`}>
+                    <Link href={`/student/attempts/${a.id}`} onClick={(e) => e.stopPropagation()}>
                       <Button variant="primary" size="sm">{t("student.results.continue")}</Button>
                     </Link>
                   )}
@@ -115,6 +145,16 @@ export default async function StudentResultsPage() {
               </div>
             </Card>
           );
+
+          if (isFinished) {
+            return (
+              <Link key={a.id} href={`/student/attempts/${a.id}/result`}>
+                {cardContent}
+              </Link>
+            );
+          }
+
+          return <div key={a.id}>{cardContent}</div>;
         })}
 
         {(!attempts || attempts.length === 0) && (

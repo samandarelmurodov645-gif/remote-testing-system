@@ -87,10 +87,7 @@ export default async function StudentTestsPage() {
 
                   {/* CTA */}
                   <div className="flex gap-2">
-                    <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl border-2 border-slate-200 text-slate-700 group-hover:border-indigo-200 group-hover:text-indigo-600 transition-all">
-                      {t("student.tests.details")}
-                    </span>
-                    <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl bg-indigo-600 text-white group-hover:bg-indigo-700 transition-colors shadow-sm">
+                    <span className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl bg-indigo-600 text-white group-hover:bg-indigo-700 transition-colors shadow-sm">
                       {t("student.tests.start")}
                     </span>
                   </div>

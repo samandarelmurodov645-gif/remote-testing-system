@@ -399,6 +399,17 @@ const uz: TranslationMap = {
   "excel.create.rule4": "Fayl nomi test nomi sifatida ishlatiladi",
   "excel.create.confirmBtn": "Test yaratish va savollarni import qilish",
   "excel.create.creating": "Test yaratilmoqda...",
+
+  // Attempt result
+  "attempt.result.title": "Test natijalari",
+  "attempt.result.score": "Ball",
+  "attempt.result.correctCount": "to'g'ri javob",
+  "attempt.result.breakdown": "Savollar tahlili",
+  "attempt.result.yourAnswer": "Sizning javobingiz",
+  "attempt.result.correctAnswer": "To'g'ri javob",
+  "attempt.result.tryAgain": "Qayta urinish",
+  "attempt.result.attemptsLeft": "urinish qoldi",
+  "attempt.result.question": "Savol",
 };
 
 const en: TranslationMap = {
@@ -767,6 +778,17 @@ const en: TranslationMap = {
   "excel.create.rule4": "File name will be used as test title",
   "excel.create.confirmBtn": "Create Test & Import Questions",
   "excel.create.creating": "Creating test...",
+
+  // Attempt result
+  "attempt.result.title": "Test Result",
+  "attempt.result.score": "Score",
+  "attempt.result.correctCount": "correct",
+  "attempt.result.breakdown": "Question Breakdown",
+  "attempt.result.yourAnswer": "Your Answer",
+  "attempt.result.correctAnswer": "Correct Answer",
+  "attempt.result.tryAgain": "Try Again",
+  "attempt.result.attemptsLeft": "attempts left",
+  "attempt.result.question": "Question",
 };
 
 const ru: TranslationMap = {
@@ -1133,6 +1155,17 @@ const ru: TranslationMap = {
   "excel.create.rule4": "Имя файла будет использоваться как название теста",
   "excel.create.confirmBtn": "Создать тест и импортировать вопросы",
   "excel.create.creating": "Создание теста...",
+
+  // Attempt result
+  "attempt.result.title": "Результат теста",
+  "attempt.result.score": "Балл",
+  "attempt.result.correctCount": "правильно",
+  "attempt.result.breakdown": "Разбор вопросов",
+  "attempt.result.yourAnswer": "Ваш ответ",
+  "attempt.result.correctAnswer": "Правильный ответ",
+  "attempt.result.tryAgain": "Попробовать снова",
+  "attempt.result.attemptsLeft": "попыток осталось",
+  "attempt.result.question": "Вопрос",
 };
 
 const fr: TranslationMap = {
@@ -1505,6 +1538,17 @@ const fr: TranslationMap = {
   "excel.create.rule4": "Le nom du fichier sera utilisé comme titre du test",
   "excel.create.confirmBtn": "Créer le test et importer les questions",
   "excel.create.creating": "Création du test...",
+
+  // Attempt result
+  "attempt.result.title": "Résultat du test",
+  "attempt.result.score": "Score",
+  "attempt.result.correctCount": "correct",
+  "attempt.result.breakdown": "Analyse des questions",
+  "attempt.result.yourAnswer": "Votre réponse",
+  "attempt.result.correctAnswer": "Réponse correcte",
+  "attempt.result.tryAgain": "Réessayer",
+  "attempt.result.attemptsLeft": "tentatives restantes",
+  "attempt.result.question": "Question",
 };
 
 export const translations: Record<Lang, TranslationMap> = { uz, en, ru, fr };

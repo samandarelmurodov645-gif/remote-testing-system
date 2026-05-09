@@ -55,7 +55,7 @@ export default function AttemptRunner(props: {
     submittedRef.current = true;
     startTransition(async () => {
       await submitAttemptAction({ attempt_id: props.attemptId, answers, expired: true });
-      window.location.href = "/student/results";
+      window.location.href = `/student/attempts/${props.attemptId}/result`;
     });
   // props.attemptId and answers are intentionally captured at expiry time;
   // submittedRef ensures this fires at most once regardless of re-renders.
@@ -74,7 +74,7 @@ export default function AttemptRunner(props: {
         setMessage(res.message);
         return;
       }
-      window.location.href = "/student/results";
+      window.location.href = `/student/attempts/${props.attemptId}/result`;
     });
   }
 
