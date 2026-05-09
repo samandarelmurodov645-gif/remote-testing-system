@@ -7,6 +7,7 @@ import {
   deleteOptionAction,
   deleteQuestionAction,
   setCorrectOptionAction,
+  resetAttemptsAction,
 } from "./actions";
 import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
@@ -18,10 +19,10 @@ export default async function AdminTestDetailPage({
   searchParams,
 }: {
   params: Promise<{ testId: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reset?: string }>;
 }) {
   const { testId } = await params;
-  const { error } = await searchParams;
+  const { error, reset } = await searchParams;
   const supabase = await createSupabaseServerClient();
   const t = await getServerT();
 
@@ -100,6 +101,12 @@ export default async function AdminTestDetailPage({
       {error && (
         <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
           <p className="text-red-600">{decodeURIComponent(error)}</p>
+        </div>
+      )}
+
+      {reset === "success" && (
+        <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+          <p className="text-emerald-700 font-medium">{t("admin.testDetail.resetSuccess")}</p>
         </div>
       )}
 
@@ -286,6 +293,33 @@ export default async function AdminTestDetailPage({
               </div>
             </Card>
           )}
+        </div>
+      </Card>
+
+      {/* Danger Zone */}
+      <Card variant="bordered" padding="lg" className="mt-6 border-red-200">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <h2 className="text-lg font-semibold text-red-700 mb-1">{t("admin.testDetail.dangerZone")}</h2>
+            <p className="text-sm text-slate-600">{t("admin.testDetail.resetAttemptsDesc")}</p>
+          </div>
+          <form action={resetAttemptsAction} className="shrink-0">
+            <input type="hidden" name="test_id" value={test.id} />
+            <Button
+              type="submit"
+              variant="danger"
+              size="sm"
+              onClick={(e) => {
+                if (!confirm(t("admin.testDetail.resetAttemptsConfirm"))) e.preventDefault();
+              }}
+            >
+              <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              {t("admin.testDetail.resetAttempts")}
+            </Button>
+          </form>
         </div>
       </Card>
     </div>

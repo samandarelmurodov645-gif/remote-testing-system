@@ -63,7 +63,9 @@ export default async function StudentTestDetailPage({
 
       {error && (
         <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-          <p className="text-red-600">{decodeURIComponent(error)}</p>
+          <p className="text-red-600">
+            {(() => { const k = `error.${error}`; const msg = t(k); return msg === k ? decodeURIComponent(error) : msg; })()}
+          </p>
         </div>
       )}
 

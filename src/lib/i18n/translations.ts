@@ -105,6 +105,11 @@ const uz: TranslationMap = {
   "admin.testDetail.noQuestions": "Hali savollar yo'q",
   "admin.testDetail.noQuestionsHint":
     "Boshlash uchun yuqoridagi formadan birinchi savolingizni qo'shing.",
+  "admin.testDetail.dangerZone": "Xavfli zona",
+  "admin.testDetail.resetAttempts": "Urinishlarni tiklash",
+  "admin.testDetail.resetAttemptsDesc": "Bu test uchun barcha studentlar urinishlarini o'chiradi. Bu amal qaytarib bo'lmaydi.",
+  "admin.testDetail.resetAttemptsConfirm": "Bu test uchun BARCHA urinishlarni o'chirishni xohlaysizmi? Bu amal qaytarib bo'lmaydi.",
+  "admin.testDetail.resetSuccess": "Barcha urinishlar muvaffaqiyatli o'chirildi.",
   "admin.testDetail.addQuestion": "Savol qo'shish",
   "admin.testDetail.addOption": "Variant qo'shish",
   "admin.testDetail.options": "Javob variantlari",
@@ -202,6 +207,9 @@ const uz: TranslationMap = {
   "student.testDetail.attemptsInfo":
     "Bu testni %d marta topshirishingiz mumkin",
   "student.testDetail.start": "Testni boshlash",
+  "error.no_attempts_remaining": "Urinishlar tugadi. Bu test uchun barcha urinishlaringizdan foydalandingiz.",
+  "error.not_available": "Bu test hozirda mavjud emas.",
+  "error.invalid_test": "Test topilmadi.",
 
   // Student results
   "student.results.title": "Mening natijalarim",
@@ -520,6 +528,11 @@ const en: TranslationMap = {
   "admin.testDetail.noQuestions": "No questions yet",
   "admin.testDetail.noQuestionsHint":
     "Add your first question using the form above.",
+  "admin.testDetail.dangerZone": "Danger Zone",
+  "admin.testDetail.resetAttempts": "Reset All Attempts",
+  "admin.testDetail.resetAttemptsDesc": "Deletes all student attempts for this test. This action cannot be undone.",
+  "admin.testDetail.resetAttemptsConfirm": "Are you sure you want to delete ALL attempts for this test? This cannot be undone.",
+  "admin.testDetail.resetSuccess": "All attempts have been successfully deleted.",
   "admin.testDetail.addQuestion": "Add Question",
   "admin.testDetail.addOption": "Add Option",
   "admin.testDetail.options": "Answer Options",
@@ -609,6 +622,9 @@ const en: TranslationMap = {
   "student.testDetail.attemptsInfo":
     "You can take this test %d times",
   "student.testDetail.start": "Start Test",
+  "error.no_attempts_remaining": "No attempts remaining. You have used all attempts for this test.",
+  "error.not_available": "This test is not available.",
+  "error.invalid_test": "Test not found.",
 
   "student.results.title": "My Results",
   "student.results.desc": "View your test history and scores",
@@ -918,6 +934,11 @@ const ru: TranslationMap = {
   "admin.testDetail.noQuestions": "Вопросов ещё нет",
   "admin.testDetail.noQuestionsHint":
     "Добавьте первый вопрос с помощью формы выше.",
+  "admin.testDetail.dangerZone": "Опасная зона",
+  "admin.testDetail.resetAttempts": "Сбросить все попытки",
+  "admin.testDetail.resetAttemptsDesc": "Удаляет все попытки студентов для этого теста. Это действие нельзя отменить.",
+  "admin.testDetail.resetAttemptsConfirm": "Вы уверены, что хотите удалить ВСЕ попытки для этого теста? Это нельзя отменить.",
+  "admin.testDetail.resetSuccess": "Все попытки успешно удалены.",
   "admin.testDetail.addQuestion": "Добавить вопрос",
   "admin.testDetail.addOption": "Добавить вариант",
   "admin.testDetail.options": "Варианты ответов",
@@ -1006,6 +1027,9 @@ const ru: TranslationMap = {
   "student.testDetail.autoSave": "Ваш прогресс сохраняется автоматически",
   "student.testDetail.attemptsInfo": "Вы можете пройти этот тест %d раз",
   "student.testDetail.start": "Начать тест",
+  "error.no_attempts_remaining": "Попытки исчерпаны. Вы использовали все попытки для этого теста.",
+  "error.not_available": "Этот тест недоступен.",
+  "error.invalid_test": "Тест не найден.",
 
   "student.results.title": "Мои результаты",
   "student.results.desc": "Просмотрите историю тестов и баллы",
@@ -1315,6 +1339,11 @@ const fr: TranslationMap = {
   "admin.testDetail.noQuestions": "Pas encore de questions",
   "admin.testDetail.noQuestionsHint":
     "Ajoutez votre première question avec le formulaire ci-dessus.",
+  "admin.testDetail.dangerZone": "Zone dangereuse",
+  "admin.testDetail.resetAttempts": "Réinitialiser toutes les tentatives",
+  "admin.testDetail.resetAttemptsDesc": "Supprime toutes les tentatives des étudiants pour ce test. Cette action est irréversible.",
+  "admin.testDetail.resetAttemptsConfirm": "Êtes-vous sûr de vouloir supprimer TOUTES les tentatives pour ce test ? Cette action est irréversible.",
+  "admin.testDetail.resetSuccess": "Toutes les tentatives ont été supprimées avec succès.",
   "admin.testDetail.addQuestion": "Ajouter une question",
   "admin.testDetail.addOption": "Ajouter une option",
   "admin.testDetail.options": "Options de réponse",
@@ -1407,6 +1436,9 @@ const fr: TranslationMap = {
   "student.testDetail.attemptsInfo":
     "Vous pouvez passer ce test %d fois",
   "student.testDetail.start": "Commencer le test",
+  "error.no_attempts_remaining": "Aucune tentative restante. Vous avez utilisé toutes vos tentatives pour ce test.",
+  "error.not_available": "Ce test n'est pas disponible.",
+  "error.invalid_test": "Test introuvable.",
 
   "student.results.title": "Mes résultats",
   "student.results.desc": "Consultez l'historique de vos tests et scores",

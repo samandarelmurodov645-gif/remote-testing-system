@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 const addQuestionSchema = z.object({
   test_id: z.string().uuid(),
@@ -171,4 +172,28 @@ export async function setCorrectOptionAction(formData: FormData) {
 
   revalidatePath(`/admin/tests/${parsed.data.test_id}`);
   redirect(`/admin/tests/${parsed.data.test_id}`);
+}
+
+const resetAttemptsSchema = z.object({ test_id: z.string().uuid() });
+
+export async function resetAttemptsAction(formData: FormData) {
+  await requireRole("admin");
+
+  const parsed = resetAttemptsSchema.safeParse({ test_id: formData.get("test_id") });
+  if (!parsed.success) redirect("/admin/tests?error=invalid_input");
+
+  // Service client bypasses student-scoped RLS on the attempts table.
+  const service = createSupabaseServiceClient();
+  const { error } = await service
+    .from("attempts")
+    .delete()
+    .eq("test_id", parsed.data.test_id);
+
+  if (error)
+    redirect(
+      `/admin/tests/${parsed.data.test_id}?error=${encodeURIComponent(error.message)}`
+    );
+
+  revalidatePath(`/admin/tests/${parsed.data.test_id}`);
+  redirect(`/admin/tests/${parsed.data.test_id}?reset=success`);
 }
