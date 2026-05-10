@@ -7,7 +7,9 @@
       "Bash(Select-Object Name)",
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\user\\\\OneDrive\\\\Desktop\\\\remote-testing-system-main\" -Force)",
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\user\\\\OneDrive\\\\Desktop\\\\remote-testing-system-main\\\\src\\\\app\" -Force)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(node -e \"require\\('./src/lib/i18n/translations'\\)\")",
+      "Bash(npx eslint *)"
     ]
   }
 }
