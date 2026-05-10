@@ -2,12 +2,40 @@
 
 import { useState } from "react";
 import { Card } from "@/components/ui";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
 
 type Tab = "open-ended" | "excel" | "subjects";
 
 export function AdminGuide() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("open-ended");
+
+  const tabs = [
+    { id: "open-ended" as Tab, label: t("guide.tab.openEnded"), icon: "✏️" },
+    { id: "excel" as Tab, label: t("guide.tab.excel"), icon: "📊" },
+    { id: "subjects" as Tab, label: t("guide.tab.subjects"), icon: "🏷️" },
+  ];
+
+  const oeSteps = [
+    { step: 1, text: t("guide.oe.step1") },
+    { step: 2, text: t("guide.oe.step2"), highlight: true },
+    { step: 3, text: t("guide.oe.step3") },
+    { step: 4, text: t("guide.oe.step4") },
+    { step: 5, text: t("guide.oe.step5") },
+    { step: 6, text: t("guide.oe.step6") },
+  ];
+
+  const colHeaders = [
+    t("guide.excel.colA"),
+    t("guide.excel.colB"),
+    t("guide.excel.colC"),
+    t("guide.excel.colD"),
+    t("guide.excel.colE"),
+    t("guide.excel.colF"),
+    t("guide.excel.colG"),
+  ];
 
   return (
     <div className="mb-8">
@@ -21,7 +49,7 @@ export function AdminGuide() {
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <span className="flex-1 text-left">Admin Guide — Excel format, open-ended questions, subjects</span>
+        <span className="flex-1 text-left">{t("guide.toggle")}</span>
         <svg
           className={`w-4 h-4 text-slate-400 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -34,22 +62,18 @@ export function AdminGuide() {
         <Card variant="bordered" padding="none" className="mt-2 overflow-hidden">
           {/* Tab bar */}
           <div className="flex border-b border-slate-200 bg-slate-50">
-            {([
-              { id: "open-ended" as Tab, label: "Open-Ended Questions", icon: "✏️" },
-              { id: "excel" as Tab, label: "Excel Format", icon: "📊" },
-              { id: "subjects" as Tab, label: "Subjects", icon: "🏷️" },
-            ] as const).map((t) => (
+            {tabs.map((tabItem) => (
               <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
+                key={tabItem.id}
+                onClick={() => setTab(tabItem.id)}
                 className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
-                  tab === t.id
+                  tab === tabItem.id
                     ? "border-indigo-600 text-indigo-700 bg-white"
                     : "border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
-                <span>{t.icon}</span>
-                <span className="hidden sm:inline">{t.label}</span>
+                <span>{tabItem.icon}</span>
+                <span className="hidden sm:inline">{tabItem.label}</span>
               </button>
             ))}
           </div>
@@ -59,29 +83,12 @@ export function AdminGuide() {
             {tab === "open-ended" && (
               <div className="space-y-5">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Creating open-ended questions manually</h3>
-                  <p className="text-sm text-slate-600">
-                    Open-answer questions require the student to type a text response. The system checks it
-                    case-insensitively (so "Paris" and "paris" both count as correct).
-                  </p>
+                  <h3 className="font-semibold text-slate-900 mb-1">{t("guide.oe.title")}</h3>
+                  <p className="text-sm text-slate-600">{t("guide.oe.desc")}</p>
                 </div>
 
                 <ol className="space-y-3">
-                  {[
-                    { step: 1, text: "Go to the test detail page (click Edit on any test)." },
-                    {
-                      step: 2,
-                      text: 'In the Questions section, click the "Open Answer" toggle next to the question input.',
-                      highlight: true,
-                    },
-                    { step: 3, text: "Type the question prompt in the text field." },
-                    { step: 4, text: 'Type the expected correct answer in the field that appears below (purple border).' },
-                    { step: 5, text: 'Click "Add Question". No answer options are needed.' },
-                    {
-                      step: 6,
-                      text: "To update the correct answer later, use the \"Save Correct Answer\" button on the question card.",
-                    },
-                  ].map((item) => (
+                  {oeSteps.map((item) => (
                     <li key={item.step} className="flex items-start gap-3">
                       <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                         {item.step}
@@ -95,7 +102,8 @@ export function AdminGuide() {
 
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                   <p className="text-sm text-amber-800">
-                    <span className="font-semibold">Tip:</span> Open-ended questions work best for single-word or short-phrase answers (e.g. country capitals, chemical formulas, historical dates). For longer answers, multiple-choice is more reliable.
+                    <span className="font-semibold">{t("guide.oe.tipLabel")}</span>{" "}
+                    {t("guide.oe.tip")}
                   </p>
                 </div>
               </div>
@@ -105,11 +113,13 @@ export function AdminGuide() {
             {tab === "excel" && (
               <div className="space-y-5">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Excel / CSV column format</h3>
+                  <h3 className="font-semibold text-slate-900 mb-1">{t("guide.excel.title")}</h3>
                   <p className="text-sm text-slate-600">
-                    Column <span className="font-mono font-semibold">G</span> controls the question type.
-                    Leave it blank or write <code className="bg-slate-100 px-1 rounded">MC</code> for multiple-choice,
-                    or write <code className="bg-slate-100 px-1 rounded">OA</code> for open-answer.
+                    {t("guide.excel.colDesc").split("MC").map((part, i, arr) =>
+                      i < arr.length - 1 ? (
+                        <span key={i}>{part}<code className="bg-slate-100 px-1 rounded">MC</code></span>
+                      ) : part
+                    )}
                   </p>
                 </div>
 
@@ -117,7 +127,7 @@ export function AdminGuide() {
                   <table className="text-xs w-full border-collapse rounded-xl overflow-hidden">
                     <thead>
                       <tr className="bg-slate-100">
-                        {["A — Question", "B — Option 1", "C — Option 2", "D — Option 3", "E — Option 4", "F — Correct / Answer", "G — Type"].map((h, i) => (
+                        {colHeaders.map((h, i) => (
                           <th
                             key={i}
                             className={`border border-slate-200 px-2.5 py-2 text-left font-semibold whitespace-nowrap ${
@@ -169,32 +179,26 @@ export function AdminGuide() {
 
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                    <p className="text-sm font-semibold text-blue-900 mb-2">Multiple Choice (MC)</p>
+                    <p className="text-sm font-semibold text-blue-900 mb-2">{t("guide.excel.mcTitle")}</p>
                     <ul className="text-xs text-blue-800 space-y-1">
-                      <li>• Column G: <code className="bg-blue-100 px-1 rounded">MC</code> or leave blank</li>
-                      <li>• Columns B–E: four answer options</li>
-                      <li>• Column F: correct option number (1, 2, 3 or 4)</li>
+                      <li>• {t("guide.excel.mcRule1")}</li>
+                      <li>• {t("guide.excel.mcRule2")}</li>
+                      <li>• {t("guide.excel.mcRule3")}</li>
                     </ul>
                   </div>
                   <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
-                    <p className="text-sm font-semibold text-purple-900 mb-2">Open Answer (OA)</p>
+                    <p className="text-sm font-semibold text-purple-900 mb-2">{t("guide.excel.oaTitle")}</p>
                     <ul className="text-xs text-purple-800 space-y-1">
-                      <li>• Column G: <code className="bg-purple-100 px-1 rounded">OA</code></li>
-                      <li>• Columns B–E: leave empty</li>
-                      <li>• Column F: the expected correct answer text</li>
-                      <li>• Matching is case-insensitive</li>
+                      <li>• {t("guide.excel.oaRule1")}</li>
+                      <li>• {t("guide.excel.oaRule2")}</li>
+                      <li>• {t("guide.excel.oaRule3")}</li>
+                      <li>• {t("guide.excel.oaRule4")}</li>
                     </ul>
                   </div>
                 </div>
 
                 <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                  <p className="text-sm text-slate-700">
-                    <span className="font-semibold">Accepted values for column G:</span>{" "}
-                    <code className="bg-slate-200 px-1 rounded font-mono">MC</code>,{" "}
-                    <code className="bg-slate-200 px-1 rounded font-mono">OA</code>,{" "}
-                    <code className="bg-slate-200 px-1 rounded font-mono">OPEN</code>, or blank (defaults to MC).
-                    Both flows support OA — "Create from Excel" and "Add to existing test".
-                  </p>
+                  <p className="text-sm text-slate-700">{t("guide.excel.colGNote")}</p>
                 </div>
               </div>
             )}
@@ -203,35 +207,24 @@ export function AdminGuide() {
             {tab === "subjects" && (
               <div className="space-y-5">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Assigning subjects when uploading Excel</h3>
-                  <p className="text-sm text-slate-600">
-                    Subjects are assigned at the <span className="font-medium">test level</span>, not per-question.
-                    There are two ways to assign a subject:
-                  </p>
+                  <h3 className="font-semibold text-slate-900 mb-1">{t("guide.sub.title")}</h3>
+                  <p className="text-sm text-slate-600">{t("guide.sub.desc")}</p>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
                     <div className="w-8 h-8 rounded-lg bg-emerald-200 flex items-center justify-center shrink-0 font-bold text-emerald-800 text-sm">1</div>
                     <div>
-                      <p className="font-semibold text-emerald-900 text-sm mb-1">During Excel upload (create new test)</p>
-                      <p className="text-xs text-emerald-800">
-                        After selecting your Excel file and previewing the questions, a{" "}
-                        <span className="font-semibold">Subject dropdown</span> appears above the "Create Test" button.
-                        Select the subject before clicking confirm — it applies to the entire test.
-                      </p>
+                      <p className="font-semibold text-emerald-900 text-sm mb-1">{t("guide.sub.way1Title")}</p>
+                      <p className="text-xs text-emerald-800">{t("guide.sub.way1Desc")}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl">
                     <div className="w-8 h-8 rounded-lg bg-indigo-200 flex items-center justify-center shrink-0 font-bold text-indigo-800 text-sm">2</div>
                     <div>
-                      <p className="font-semibold text-indigo-900 text-sm mb-1">From the manual Create Test form</p>
-                      <p className="text-xs text-indigo-800">
-                        Scroll down past the Excel upload section to the <span className="font-semibold">Create New Test</span> form.
-                        It has a Subject dropdown — choose the subject before clicking "Create Test".
-                        You can also change the subject later from the Test Settings panel inside the test.
-                      </p>
+                      <p className="font-semibold text-indigo-900 text-sm mb-1">{t("guide.sub.way2Title")}</p>
+                      <p className="text-xs text-indigo-800">{t("guide.sub.way2Desc")}</p>
                     </div>
                   </div>
                 </div>
@@ -240,41 +233,24 @@ export function AdminGuide() {
                   <table className="text-xs w-full border-collapse">
                     <thead>
                       <tr className="bg-slate-100">
-                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">Subject</th>
-                        <th className="border border-slate-200 px-3 py-2 text-center text-slate-700 font-semibold">Icon</th>
-                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">Uz</th>
-                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">En</th>
-                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">Ru</th>
+                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">{t("guide.sub.colSubject")}</th>
+                        <th className="border border-slate-200 px-3 py-2 text-center text-slate-700 font-semibold">{t("guide.sub.colIcon")}</th>
+                        <th className="border border-slate-200 px-3 py-2 text-left text-slate-700 font-semibold">{t("subject.label")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {[
-                        ["Mathematics", "📐", "Matematika", "Mathematics", "Математика"],
-                        ["Physics", "⚡", "Fizika", "Physics", "Физика"],
-                        ["Chemistry", "⚗️", "Kimyo", "Chemistry", "Химия"],
-                        ["Biology", "🔬", "Biologiya", "Biology", "Биология"],
-                        ["History", "📚", "Tarix", "History", "История"],
-                        ["Geography", "🌍", "Geografiya", "Geography", "География"],
-                        ["Literature", "📖", "Adabiyot", "Literature", "Литература"],
-                        ["English", "🇬🇧", "Ingliz tili", "English", "Английский"],
-                        ["Computer Science", "💻", "Informatika", "Computer Science", "Информатика"],
-                        ["General", "📝", "Umumiy", "General", "Общее"],
-                      ].map(([name, icon, uz, en, ru]) => (
+                      {SUBJECTS.map((name) => (
                         <tr key={name} className="bg-white hover:bg-slate-50">
                           <td className="border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-700">{name}</td>
-                          <td className="border border-slate-200 px-3 py-1.5 text-center">{icon}</td>
-                          <td className="border border-slate-200 px-3 py-1.5 text-slate-600">{uz}</td>
-                          <td className="border border-slate-200 px-3 py-1.5 text-slate-600">{en}</td>
-                          <td className="border border-slate-200 px-3 py-1.5 text-slate-600">{ru}</td>
+                          <td className="border border-slate-200 px-3 py-1.5 text-center">{SUBJECT_EMOJI[name]}</td>
+                          <td className="border border-slate-200 px-3 py-1.5 text-slate-600">{t(`subject.${name}`)}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
 
-                <p className="text-xs text-slate-500">
-                  Subjects are used to group tests on the student-facing tests page and help students find relevant content faster.
-                </p>
+                <p className="text-xs text-slate-500">{t("guide.sub.footer")}</p>
               </div>
             )}
           </div>
