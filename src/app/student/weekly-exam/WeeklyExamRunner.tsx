@@ -256,7 +256,7 @@ export default function WeeklyExamRunner({
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Hero */}
-      <Card variant="elevated" padding="lg" className="bg-gradient-to-br from-indigo-600 to-purple-700 text-white border-0">
+      <Card variant="elevated" padding="lg" className="text-white border-0" style={{ background: "linear-gradient(135deg, #4338CA 0%, #059669 100%)" }}>
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-3">
@@ -273,15 +273,16 @@ export default function WeeklyExamRunner({
             <h1 className="text-3xl font-bold mb-2">{t("weekly.title")}</h1>
             <p className="text-white/80 mb-6">{t("weekly.subtitle")}</p>
             <Button
-              variant="secondary"
+              variant="primary"
               size="lg"
               onClick={startExam}
               disabled={isPending}
-              className="bg-white text-indigo-700 hover:bg-indigo-50 border-0"
+              style={{ background: "white", color: "#4338CA", boxShadow: "0 4px 14px rgba(0,0,0,0.18)" }}
+              className="hover:opacity-90 hover:-translate-y-0.5"
             >
               {isPending ? (
                 <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-700 rounded-full animate-spin" />
                   {t("weekly.loading")}
                 </span>
               ) : (

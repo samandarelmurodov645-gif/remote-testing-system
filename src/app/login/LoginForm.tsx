@@ -39,7 +39,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#0F0F1A" }}>
+    <div className="min-h-screen flex" style={{ background: "#1A1A2E" }}>
 
       {/* ── Left: branded panel — indigo → dark emerald ── */}
       <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col">
@@ -133,7 +133,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
       </div>
 
       {/* ── Right: form panel ── */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative" style={{ background: "#0F0F1A" }}>
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative" style={{ background: "#1A1A2E" }}>
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse at 70% 50%, rgba(67,56,202,0.07) 0%, transparent 60%)"
         }} />

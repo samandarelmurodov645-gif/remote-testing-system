@@ -38,7 +38,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "#0F0F1A" }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: "#1A1A2E" }}>
 
       {/* Deep space gradient — indigo + emerald */}
       <div className="absolute inset-0 pointer-events-none" style={{
