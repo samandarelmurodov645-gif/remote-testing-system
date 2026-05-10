@@ -39,11 +39,10 @@ export function AppSidebar({
       {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-all hover:scale-105"
-        style={{ background: "linear-gradient(135deg, #1e1b4b, #064e3b)", boxShadow: "0 4px 16px rgba(16,185,129,0.3)" }}
+        className="lg:hidden fixed top-4 left-4 z-40 w-10 h-10 rounded-xl flex items-center justify-center shadow-md transition-all hover:scale-105 bg-white border border-slate-200"
         aria-label="Open menu"
       >
-        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
@@ -51,7 +50,7 @@ export function AppSidebar({
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -65,9 +64,9 @@ export function AppSidebar({
           lg:translate-x-0
         `}
         style={{
-          background: "linear-gradient(180deg, #1e1b4b 0%, #2a2472 30%, #0f3728 70%, #064e3b 100%)",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
-          boxShadow: "4px 0 32px rgba(0,0,0,0.5)",
+          background: "#FFFFFF",
+          borderRight: "1px solid rgba(0,0,0,0.06)",
+          boxShadow: "2px 0 20px rgba(0,0,0,0.06)",
         }}
       >
         {/* Top accent bar — indigo → emerald */}
@@ -81,16 +80,16 @@ export function AppSidebar({
         />
 
         {/* Logo */}
-        <div className="px-5 py-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="px-5 py-5 shrink-0" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
           <Link
             href={logoHref}
             className="flex items-center gap-3 group"
             onClick={() => NProgress.start()}
           >
-            <div className="transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">
+            <div className="transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(67,56,202,0.4)]">
               <Logo size={36} />
             </div>
-            <span className="text-white font-bold text-lg tracking-tight">{logoLabel}</span>
+            <span className="text-slate-800 font-bold text-lg tracking-tight">{logoLabel}</span>
           </Link>
         </div>
 
@@ -108,8 +107,8 @@ export function AppSidebar({
                   "transition-all duration-200 group relative",
                   mounted ? "animate-sidebar-in" : "",
                   isActive
-                    ? "sidebar-active text-white"
-                    : "text-emerald-100/50 hover:text-white hover:bg-white/8",
+                    ? "sidebar-active text-indigo-700"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
                 ].join(" ")}
                 style={{ animationDelay: `${idx * 60}ms` }}
               >
@@ -117,12 +116,12 @@ export function AppSidebar({
                 {isActive && (
                   <span
                     className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r-full"
-                    style={{ background: "linear-gradient(180deg, #10B981, #059669)" }}
+                    style={{ background: "linear-gradient(180deg, #4338CA, #6366f1)" }}
                   />
                 )}
 
                 {/* Icon */}
-                <span className={`shrink-0 transition-all duration-200 ${isActive ? "text-emerald-400" : "text-emerald-100/35 group-hover:text-emerald-300 group-hover:scale-110"}`}>
+                <span className={`shrink-0 transition-all duration-200 ${isActive ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600 group-hover:scale-110"}`}>
                   {item.icon}
                 </span>
 
@@ -132,7 +131,7 @@ export function AppSidebar({
                 {isActive && (
                   <span
                     className="ml-auto w-1.5 h-1.5 rounded-full shrink-0 animate-pulse"
-                    style={{ background: "#10B981" }}
+                    style={{ background: "#4338CA" }}
                   />
                 )}
               </Link>
@@ -141,13 +140,13 @@ export function AppSidebar({
         </nav>
 
         {/* Bottom: Language + Logout */}
-        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
           <div className="space-y-1">
-            <LanguageSwitcher />
+            <LanguageSwitcher variant="light" />
             <form action="/logout" method="post">
               <button
                 type="submit"
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-emerald-100/45 hover:bg-red-500/15 hover:text-red-300 transition-all group"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all group"
               >
                 <svg className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

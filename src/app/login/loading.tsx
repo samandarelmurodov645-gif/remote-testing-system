@@ -6,16 +6,16 @@ export default function LoginLoading() {
   return (
     <div className="min-h-screen flex">
       {/* Left branding panel */}
-      <div className="hidden lg:flex flex-col justify-center flex-1 bg-slate-900 p-12">
-        <Sk className="h-10 w-40 mb-6 bg-slate-700" />
-        <Sk className="h-8 w-64 mb-2 bg-slate-700" />
-        <Sk className="h-8 w-48 mb-6 bg-slate-700" />
-        <Sk className="h-4 w-80 mb-8 bg-slate-700" />
+      <div className="hidden lg:flex flex-col justify-center flex-1 p-12" style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #064e3b 100%)" }}>
+        <Sk className="h-10 w-40 mb-6 bg-white/20" />
+        <Sk className="h-8 w-64 mb-2 bg-white/20" />
+        <Sk className="h-8 w-48 mb-6 bg-white/20" />
+        <Sk className="h-4 w-80 mb-8 bg-white/15" />
         <div className="flex gap-6">
           {[...Array(3)].map((_, i) => (
             <div key={i}>
-              <Sk className="h-7 w-16 mb-1 bg-slate-700" />
-              <Sk className="h-3 w-20 bg-slate-700" />
+              <Sk className="h-7 w-16 mb-1 bg-white/20" />
+              <Sk className="h-3 w-20 bg-white/15" />
             </div>
           ))}
         </div>

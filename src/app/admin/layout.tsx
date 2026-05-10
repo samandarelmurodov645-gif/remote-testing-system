@@ -42,7 +42,7 @@ export default async function AdminLayout({
   await requireRole("admin");
 
   return (
-    <div className="min-h-screen" style={{ background: "#1A1A2E" }}>
+    <div className="min-h-screen" style={{ background: "#F8FAFC" }}>
       <AppSidebar
         role="admin"
         navItems={adminNavItems}

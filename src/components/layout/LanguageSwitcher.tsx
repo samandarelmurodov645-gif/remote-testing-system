@@ -32,15 +32,11 @@ export function LanguageSwitcher({
       <button
         onClick={() => setOpen((o) => !o)}
         disabled={isChanging}
-        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all disabled:opacity-60 ${
-          variant === "light"
-            ? "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-            : "text-slate-300 hover:bg-slate-700 hover:text-white"
-        }`}
+        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all disabled:opacity-60 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
         aria-label={t("lang.select")}
       >
         {isChanging ? (
-          <span className="w-4 h-4 border-2 border-slate-500 border-t-slate-300 rounded-full animate-spin" />
+          <span className="w-4 h-4 border-2 border-slate-300 border-t-indigo-500 rounded-full animate-spin" />
         ) : (
           <span className="text-base">{current.flag}</span>
         )}
@@ -56,7 +52,7 @@ export function LanguageSwitcher({
       </button>
 
       {open && (
-        <div className={`absolute ${dropUp ? "bottom-full left-0 mb-2" : "top-full right-0 mt-2"} w-44 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-50`}>
+        <div className={`absolute ${dropUp ? "bottom-full left-0 mb-2" : "top-full right-0 mt-2"} w-44 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden z-50`}>
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
@@ -67,7 +63,7 @@ export function LanguageSwitcher({
               className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                 lang === l.code
                   ? "bg-indigo-600 text-white"
-                  : "text-slate-300 hover:bg-slate-700 hover:text-white"
+                  : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               <span className="text-base">{l.flag}</span>

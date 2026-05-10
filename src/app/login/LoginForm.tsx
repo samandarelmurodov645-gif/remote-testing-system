@@ -39,7 +39,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#1A1A2E" }}>
+    <div className="min-h-screen flex" style={{ background: "#F8FAFC" }}>
 
       {/* ── Left: branded panel — indigo → dark emerald ── */}
       <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col">
@@ -133,35 +133,31 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
       </div>
 
       {/* ── Right: form panel ── */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative" style={{ background: "#1A1A2E" }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 70% 50%, rgba(67,56,202,0.07) 0%, transparent 60%)"
-        }} />
-
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative bg-white">
         <div className="absolute top-4 right-4 z-10">
-          <LanguageSwitcher dropUp={false} />
+          <LanguageSwitcher dropUp={false} variant="light" />
         </div>
 
         <div className="relative w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2.5 mb-8">
             <Logo size={40} />
-            <span className="text-2xl font-bold text-white">TestPro</span>
+            <span className="text-2xl font-bold text-slate-800">TestPro</span>
           </div>
 
           {/* Form card */}
-          <div className="glass rounded-2xl border border-white/10 p-8 animate-fade-in-up">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 animate-fade-in-up">
             <div className="mb-7">
-              <h1 className="text-2xl font-bold text-white mb-1.5">
+              <h1 className="text-2xl font-bold text-slate-900 mb-1.5">
                 {mode === "signin" ? t("login.welcome") : t("login.register")}
               </h1>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-500 text-sm leading-relaxed">
                 {mode === "signin" ? t("login.welcomeDesc") : t("login.registerDesc")}
               </p>
             </div>
 
             {/* Mode toggle */}
-            <div className="flex gap-1.5 p-1 rounded-xl mb-6" style={{ background: "rgba(255,255,255,0.06)" }}>
+            <div className="flex gap-1.5 p-1 rounded-xl mb-6 bg-slate-100">
               {(["signin", "signup"] as const).map((m) => (
                 <button
                   key={m}
@@ -170,10 +166,10 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
                   disabled={pending}
                   className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     mode === m
-                      ? "text-white shadow-lg"
-                      : "text-slate-400 hover:text-slate-200"
+                      ? "text-white shadow-md"
+                      : "text-slate-500 hover:text-slate-700"
                   }`}
-                  style={mode === m ? { background: "linear-gradient(135deg, #4338CA, #059669)", boxShadow: "0 4px 12px rgba(16,185,129,0.2)" } : {}}
+                  style={mode === m ? { background: "linear-gradient(135deg, #4338CA, #059669)", boxShadow: "0 4px 12px rgba(67,56,202,0.25)" } : {}}
                 >
                   {m === "signin" ? t("login.signIn") : t("login.signUp")}
                 </button>
@@ -182,11 +178,11 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
 
             {/* Error */}
             {message && (
-              <div className="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/25 flex items-start gap-2.5">
-                <svg className="w-4 h-4 text-red-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mb-5 p-3.5 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5">
+                <svg className="w-4 h-4 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-sm text-red-300">{message}</p>
+                <p className="text-sm text-red-600">{message}</p>
               </div>
             )}
 
@@ -195,44 +191,26 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
               <input type="hidden" name="next" value={nextPath} />
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                  {t("login.emailLabel")} <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                  {t("login.emailLabel")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   name="email" type="email"
                   placeholder={t("login.emailPlaceholder")}
                   required disabled={pending}
-                  className="w-full px-4 py-3 rounded-xl text-white placeholder:text-slate-500 transition-all disabled:opacity-50"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  onFocus={e => {
-                    e.target.style.borderColor = "rgba(16,185,129,0.55)";
-                    e.target.style.boxShadow = "0 0 0 3px rgba(16,185,129,0.15), 0 0 16px rgba(16,185,129,0.08)";
-                  }}
-                  onBlur={e => {
-                    e.target.style.borderColor = "rgba(255,255,255,0.12)";
-                    e.target.style.boxShadow = "none";
-                  }}
+                  className="w-full px-4 py-3 rounded-xl text-slate-900 placeholder:text-slate-400 bg-white border border-slate-300 transition-all disabled:opacity-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                  {t("login.password")} <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                  {t("login.password")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   name="password" type="password"
                   placeholder={t("login.passwordPlaceholder")}
                   required disabled={pending}
-                  className="w-full px-4 py-3 rounded-xl text-white placeholder:text-slate-500 transition-all disabled:opacity-50"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  onFocus={e => {
-                    e.target.style.borderColor = "rgba(16,185,129,0.55)";
-                    e.target.style.boxShadow = "0 0 0 3px rgba(16,185,129,0.15), 0 0 16px rgba(16,185,129,0.08)";
-                  }}
-                  onBlur={e => {
-                    e.target.style.borderColor = "rgba(255,255,255,0.12)";
-                    e.target.style.boxShadow = "none";
-                  }}
+                  className="w-full px-4 py-3 rounded-xl text-slate-900 placeholder:text-slate-400 bg-white border border-slate-300 transition-all disabled:opacity-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                 />
                 {mode === "signup" && (
                   <p className="mt-1.5 text-xs text-slate-500">{t("login.passwordHint")}</p>
@@ -246,7 +224,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
               >
                 {pending ? (
                   <span className="flex items-center gap-2 justify-center">
-                    <span className="w-4 h-4 border-2 border-emerald-300 border-t-white rounded-full animate-spin" />
+                    <span className="w-4 h-4 border-2 border-indigo-200 border-t-white rounded-full animate-spin" />
                     {t("common.loading")}
                   </span>
                 ) : mode === "signin" ? t("login.signIn") : t("login.signUp")}
@@ -255,7 +233,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
 
             {mode === "signin" && (
               <div className="mt-4 text-center">
-                <button type="button" className="text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
+                <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
                   {t("login.forgotPassword")}
                 </button>
               </div>
@@ -268,7 +246,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
                 {t("login.noAccount")}{" "}
                 <button type="button"
                   onClick={() => { setMode("signup"); setMessage(null); }}
-                  className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                  className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
                   {t("login.signUp")}
                 </button>
               </>
@@ -277,7 +255,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
                 {t("login.hasAccount")}{" "}
                 <button type="button"
                   onClick={() => { setMode("signin"); setMessage(null); }}
-                  className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                  className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
                   {t("login.signIn")}
                 </button>
               </>
