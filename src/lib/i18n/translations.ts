@@ -410,6 +410,15 @@ const uz: TranslationMap = {
   "excel.translating": "Savollar tarjima qilinmoqda...",
   "excel.previewLang": "Ko'rib chiqish tili",
 
+  // Excel create competition from file
+  "excel.comp.title": "Excel fayldan musobaqa yaratish",
+  "excel.comp.desc": "Excel yoki CSV fayl yuklang — musobaqa va barcha savollar avtomatik yaratiladi",
+  "excel.comp.creating": "Musobaqa yaratilmoqda...",
+  "excel.comp.confirmBtn": "Musobaqa va savollarni yaratish",
+  "excel.comp.success": "Musobaqa muvaffaqiyatli yaratildi!",
+  "excel.comp.viewComp": "Musobaqani ko'rish",
+  "excel.comp.rule4": "Musobaqa nomi va vaqtini quyida kiriting",
+
   // Attempt result
   "attempt.result.title": "Test natijalari",
   "attempt.result.score": "Ball",
@@ -826,6 +835,15 @@ const en: TranslationMap = {
   "excel.translating": "Translating questions...",
   "excel.previewLang": "Preview language",
 
+  // Excel create competition from file
+  "excel.comp.title": "Create Competition from Excel",
+  "excel.comp.desc": "Upload an Excel or CSV file — competition and all questions are created automatically",
+  "excel.comp.creating": "Creating competition...",
+  "excel.comp.confirmBtn": "Create Competition & Import Questions",
+  "excel.comp.success": "Competition created successfully!",
+  "excel.comp.viewComp": "View Competition",
+  "excel.comp.rule4": "Enter competition title and dates below",
+
   // Attempt result
   "attempt.result.title": "Test Result",
   "attempt.result.score": "Score",
@@ -1239,6 +1257,15 @@ const ru: TranslationMap = {
   "excel.create.creating": "Создание теста...",
   "excel.translating": "Перевод вопросов...",
   "excel.previewLang": "Язык просмотра",
+
+  // Excel create competition from file
+  "excel.comp.title": "Создать соревнование из Excel",
+  "excel.comp.desc": "Загрузите Excel или CSV — соревнование и все вопросы создаются автоматически",
+  "excel.comp.creating": "Создание соревнования...",
+  "excel.comp.confirmBtn": "Создать соревнование и импортировать вопросы",
+  "excel.comp.success": "Соревнование успешно создано!",
+  "excel.comp.viewComp": "Просмотр соревнования",
+  "excel.comp.rule4": "Укажите название и даты соревнования ниже",
 
   // Attempt result
   "attempt.result.title": "Результат теста",
@@ -1659,6 +1686,15 @@ const fr: TranslationMap = {
   "excel.create.creating": "Création du test...",
   "excel.translating": "Traduction des questions...",
   "excel.previewLang": "Langue d'aperçu",
+
+  // Excel create competition from file
+  "excel.comp.title": "Créer un concours depuis Excel",
+  "excel.comp.desc": "Importez Excel ou CSV — le concours et toutes les questions sont créés automatiquement",
+  "excel.comp.creating": "Création du concours...",
+  "excel.comp.confirmBtn": "Créer le concours et importer les questions",
+  "excel.comp.success": "Concours créé avec succès!",
+  "excel.comp.viewComp": "Voir le concours",
+  "excel.comp.rule4": "Entrez le titre du concours et les dates ci-dessous",
 
   // Attempt result
   "attempt.result.title": "Résultat du test",

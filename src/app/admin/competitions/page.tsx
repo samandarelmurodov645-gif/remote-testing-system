@@ -6,6 +6,7 @@ import { Button, Input, Textarea, Card } from "@/components/ui";
 import { CompetitionStatusBadge } from "@/components/competitions";
 import { DeleteButton } from "./DeleteButton";
 import { getServerT } from "@/lib/i18n";
+import { CompetitionExcelUpload } from "./CompetitionExcelUpload";
 
 export default async function AdminCompetitionsPage({
   searchParams,
@@ -52,6 +53,8 @@ export default async function AdminCompetitionsPage({
           <p className="text-red-600">{decodeURIComponent(error)}</p>
         </div>
       )}
+
+      <CompetitionExcelUpload />
 
       <Card variant="bordered" padding="lg" className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-6">
