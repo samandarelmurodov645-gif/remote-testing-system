@@ -224,7 +224,7 @@ export default async function AdminTestDetailPage({
                       <input
                         name="correct_answer_text"
                         defaultValue={q.correct_answer_text ?? ""}
-                        className="flex-1 px-4 py-2.5 rounded-xl border border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm"
+                        className="flex-1 px-4 py-2.5 rounded-xl border border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm bg-white text-slate-900 placeholder:text-slate-400"
                         placeholder={t("admin.testDetail.correctAnswerPlaceholder")}
                         required
                       />
@@ -298,7 +298,7 @@ export default async function AdminTestDetailPage({
                       <input type="hidden" name="test_id" value={test.id} />
                       <input type="hidden" name="question_id" value={q.id} />
                       <input name="text"
-                        className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+                        className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm bg-white text-slate-900 placeholder:text-slate-400"
                         placeholder={t("admin.testDetail.optionPlaceholder")} required />
                       <Button type="submit" variant="secondary">
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

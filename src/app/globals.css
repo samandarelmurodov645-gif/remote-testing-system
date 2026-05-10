@@ -443,6 +443,18 @@ body {
   background-size: 40px 40px;
 }
 
+/* ─── Input defaults — readable on light backgrounds ────── */
+
+input, textarea, select {
+  color: #1e293b;
+  background-color: #ffffff;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF;
+  opacity: 1;
+}
+
 /* ─── Input focus glow — emerald ────────────────────────── */
 
 input:focus, textarea:focus, select:focus {

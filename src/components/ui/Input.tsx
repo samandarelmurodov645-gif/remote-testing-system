@@ -25,6 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
                 : "border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             }
+            bg-white text-slate-900
             disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed
             placeholder:text-slate-400
             ${className}
@@ -68,6 +69,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
                 : "border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
             }
+            bg-white text-slate-900
             disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed
             placeholder:text-slate-400
             ${className}

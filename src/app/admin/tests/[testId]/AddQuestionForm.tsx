@@ -43,7 +43,7 @@ export function AddQuestionForm({ testId }: { testId: string }) {
       <div className="flex gap-2">
         <input
           name="prompt"
-          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm bg-white text-slate-900 placeholder:text-slate-400"
           placeholder={t("admin.testDetail.questionPlaceholder")}
           required
         />
@@ -58,7 +58,7 @@ export function AddQuestionForm({ testId }: { testId: string }) {
       {questionType === "open_answer" && (
         <input
           name="correct_answer_text"
-          className="w-full px-4 py-2.5 rounded-xl border border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm"
+          className="w-full px-4 py-2.5 rounded-xl border border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm bg-white text-slate-900 placeholder:text-slate-400"
           placeholder={t("admin.testDetail.correctAnswerPlaceholder")}
           required
         />
