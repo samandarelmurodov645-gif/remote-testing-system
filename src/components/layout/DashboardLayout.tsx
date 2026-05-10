@@ -31,7 +31,7 @@ export function PageHeader({ title, description, actions }: PageHeaderProps) {
             <h1 className="text-3xl font-extrabold text-white tracking-tight">
               {title}
             </h1>
-            <span className="absolute -bottom-1.5 left-0 w-10 h-1 rounded-full" style={{ background: "linear-gradient(90deg, #4f46e5, #06b6d4)" }} />
+            <span className="absolute -bottom-1.5 left-0 w-10 h-1 rounded-full" style={{ background: "linear-gradient(90deg, #4338CA, #10B981)" }} />
           </div>
           {description && (
             <p className="mt-4 text-slate-400 text-sm leading-relaxed max-w-xl">

@@ -48,7 +48,6 @@ export default async function AdminLayout({
         navItems={adminNavItems}
         logoHref="/admin/tests"
         logoLabel="Admin"
-        logoLetter="A"
       />
       <main className="lg:ml-64 min-h-screen">
         <div className="px-4 sm:px-6 lg:px-8 py-8 pt-16 lg:pt-8 max-w-7xl mx-auto">

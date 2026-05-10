@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getCurrentUser, getCurrentUserRole } from "@/lib/auth";
 import { Button } from "@/components/ui";
+import { Logo } from "@/components/ui/Logo";
 import { getServerT } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
@@ -39,19 +40,19 @@ export default async function Home() {
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: "#0F0F1A" }}>
 
-      {/* Deep space gradient overlay */}
+      {/* Deep space gradient — indigo + emerald */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: `
-          radial-gradient(ellipse at 20% 50%, rgba(79,70,229,0.18) 0%, transparent 55%),
-          radial-gradient(ellipse at 80% 15%, rgba(124,58,237,0.14) 0%, transparent 50%),
-          radial-gradient(ellipse at 55% 90%, rgba(6,182,212,0.09) 0%, transparent 50%)
+          radial-gradient(ellipse at 20% 50%, rgba(67,56,202,0.2) 0%, transparent 55%),
+          radial-gradient(ellipse at 80% 15%, rgba(16,185,129,0.1) 0%, transparent 50%),
+          radial-gradient(ellipse at 55% 90%, rgba(5,150,105,0.08) 0%, transparent 50%)
         `
       }} />
 
       {/* Grid pattern */}
       <div className="absolute inset-0 bg-grid opacity-40 pointer-events-none" />
 
-      {/* Twinkling stars */}
+      {/* Stars */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="stars-1" />
         <div className="stars-2" />
@@ -69,7 +70,7 @@ export default async function Home() {
               top: sym.t,
               fontSize: sym.fs,
               opacity: sym.op,
-              color: "#818cf8",
+              color: "#6ee7b7",
               animationDelay: sym.delay,
               animationDuration: sym.dur,
             }}
@@ -79,14 +80,13 @@ export default async function Home() {
         ))}
       </div>
 
-      {/* Main content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Navigation */}
         <nav className="flex items-center justify-between py-6 animate-fade-in">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/40 group-hover:scale-110 group-hover:shadow-indigo-500/60 transition-all duration-300">
-              <span className="text-white font-bold text-xl">T</span>
+            <div className="group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(16,185,129,0.5)] transition-all duration-300">
+              <Logo size={40} />
             </div>
             <span className="text-2xl font-bold text-white tracking-tight">TestPro</span>
           </Link>
@@ -95,7 +95,7 @@ export default async function Home() {
             <LanguageSwitcher dropUp={false} />
             {!user ? (
               <Link href="/login">
-                <Button variant="primary" size="md" className="btn-ripple shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5">
+                <Button variant="primary" size="md" className="btn-ripple">
                   {t("nav.login")}
                 </Button>
               </Link>
@@ -116,15 +116,15 @@ export default async function Home() {
 
               {/* Hero */}
               <div className="text-center mb-20 relative">
-                {/* Glowing orb behind heading */}
+                {/* Glowing orb — indigo + emerald */}
                 <div
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full pointer-events-none animate-glow-pulse"
-                  style={{ background: "radial-gradient(ellipse, rgba(99,102,241,0.22) 0%, rgba(124,58,237,0.12) 40%, transparent 70%)" }}
+                  style={{ background: "radial-gradient(ellipse, rgba(67,56,202,0.2) 0%, rgba(16,185,129,0.08) 50%, transparent 70%)" }}
                 />
 
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-indigo-500/30 text-indigo-300 text-sm font-medium mb-8 animate-fade-in-up">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/25 text-emerald-300 text-sm font-medium mb-8 animate-fade-in-up">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   {t("home.badge")}
                 </div>
 
@@ -140,12 +140,7 @@ export default async function Home() {
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
                   <Link href="/login">
-                    <Button
-                      variant="primary"
-                      size="lg"
-                      className="min-w-52 btn-ripple shadow-xl shadow-indigo-500/35 hover:shadow-indigo-500/55 hover:-translate-y-1 transition-all"
-                      style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)" }}
-                    >
+                    <Button variant="primary" size="lg" className="min-w-52 btn-ripple hover:-translate-y-1 transition-all">
                       {t("home.startFree")}
                     </Button>
                   </Link>
@@ -180,24 +175,24 @@ export default async function Home() {
                 {[
                   {
                     icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
-                    gradient: "from-indigo-500 to-indigo-700",
-                    glow: "shadow-indigo-500/30",
+                    gradient: "from-indigo-700 to-indigo-500",
+                    glow: "shadow-indigo-600/30",
                     titleKey: "home.feature1.title",
                     descKey: "home.feature1.desc",
                     delay: "delay-100",
                   },
                   {
                     icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
-                    gradient: "from-purple-500 to-purple-700",
-                    glow: "shadow-purple-500/30",
+                    gradient: "from-violet-600 to-indigo-600",
+                    glow: "shadow-violet-500/30",
                     titleKey: "home.feature2.title",
                     descKey: "home.feature2.desc",
                     delay: "delay-200",
                   },
                   {
                     icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />,
-                    gradient: "from-cyan-500 to-cyan-700",
-                    glow: "shadow-cyan-500/30",
+                    gradient: "from-emerald-600 to-emerald-500",
+                    glow: "shadow-emerald-500/30",
                     titleKey: "home.feature3.title",
                     descKey: "home.feature3.desc",
                     delay: "delay-300",
@@ -221,7 +216,7 @@ export default async function Home() {
           ) : (
             /* Logged-in state */
             <div className="max-w-2xl mx-auto text-center">
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-500/40 animate-pulse-ring">
+              <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 animate-pulse-ring" style={{ background: "linear-gradient(135deg, #4338CA, #10B981)", boxShadow: "0 20px 60px rgba(67,56,202,0.4)" }}>
                 <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -234,7 +229,7 @@ export default async function Home() {
 
               <p className="text-lg text-slate-400 mb-10 animate-fade-in-up delay-100">
                 {t("home.loggedInAs")}{" "}
-                <span className="font-semibold text-indigo-300 bg-indigo-500/15 border border-indigo-500/25 px-2.5 py-0.5 rounded-lg text-base">
+                <span className="font-semibold text-emerald-300 bg-emerald-500/12 border border-emerald-500/25 px-2.5 py-0.5 rounded-lg text-base">
                   {user.email ?? user.id}
                 </span>
               </p>
@@ -242,13 +237,13 @@ export default async function Home() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
                 {role === "admin" ? (
                   <Link href="/admin/tests">
-                    <Button variant="primary" size="lg" className="min-w-52 btn-ripple shadow-xl shadow-indigo-500/35 hover:-translate-y-0.5 transition-all">
+                    <Button variant="primary" size="lg" className="min-w-52 btn-ripple hover:-translate-y-0.5 transition-all">
                       {t("home.goToAdmin")}
                     </Button>
                   </Link>
                 ) : (
                   <Link href="/student/tests">
-                    <Button variant="primary" size="lg" className="min-w-52 btn-ripple shadow-xl shadow-indigo-500/35 hover:-translate-y-0.5 transition-all">
+                    <Button variant="primary" size="lg" className="min-w-52 btn-ripple hover:-translate-y-0.5 transition-all">
                       {t("home.goToStudent")}
                     </Button>
                   </Link>

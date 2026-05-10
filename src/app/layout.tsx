@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TestPro — Remote Testing System",
+  title: "TestPro - Smart Learning Platform",
   description: "Smart remote testing platform for students and educators",
 };
 
