@@ -97,7 +97,7 @@ export async function updateTestAction(formData: FormData) {
   revalidatePath("/admin/tests");
   revalidatePath(`/admin/tests/${parsed.data.test_id}`);
   revalidatePath("/student/tests");
-  redirect(`/admin/tests/${parsed.data.test_id}`);
+  redirect("/admin/tests");
 }
 
 const deleteTestSchema = z.object({ test_id: z.string().uuid() });

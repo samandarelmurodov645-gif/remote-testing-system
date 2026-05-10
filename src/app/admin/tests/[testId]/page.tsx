@@ -13,7 +13,6 @@ import { AddQuestionForm } from "./AddQuestionForm";
 import { ResetAttemptsButton } from "./ResetAttemptsButton";
 import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
-import { ExcelImport } from "./ExcelImport";
 import { getServerT } from "@/lib/i18n";
 
 export default async function AdminTestDetailPage({
@@ -147,9 +146,6 @@ export default async function AdminTestDetailPage({
           <Button type="submit" variant="primary" size="lg">{t("common.save")}</Button>
         </form>
       </Card>
-
-      {/* Excel Import */}
-      <ExcelImport testId={testId} />
 
       {/* Questions Section */}
       <Card variant="bordered" padding="lg">
