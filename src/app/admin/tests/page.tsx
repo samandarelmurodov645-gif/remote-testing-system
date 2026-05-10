@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { createTestAction, deleteTestAction } from "./actions";
+import { deleteTestAction } from "./actions";
 import { PageHeader } from "@/components/layout";
-import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
+import { Button, Card, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
 import { ExcelUploadAndCreate } from "./ExcelUploadAndCreate";
 import { AdminGuide } from "./AdminGuide";
-import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
+import { SUBJECT_EMOJI } from "@/lib/subjects";
 
 export default async function AdminTestsPage({
   searchParams,
@@ -119,36 +119,6 @@ export default async function AdminTestsPage({
 
       {/* Excel Upload & Create */}
       <ExcelUploadAndCreate />
-
-      {/* Create Test Form */}
-      <Card variant="bordered" padding="lg" className="mb-8">
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">{t("admin.tests.createNew")}</h2>
-        <form action={createTestAction} className="space-y-4">
-          <Input name="title" label={t("common.testName")} placeholder={t("common.testNamePlaceholder")} required />
-          <Textarea name="description" label={t("common.description")} placeholder={t("common.descriptionPlaceholder")} rows={3} />
-          <div className="w-full">
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              {t("subject.label")} <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="subject"
-              defaultValue="General"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white text-slate-900"
-            >
-              {SUBJECTS.map((s) => (
-                <option key={s} value={s}>
-                  {SUBJECT_EMOJI[s]} {t(`subject.${s}`)}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Input name="time_limit_seconds" type="number" label={t("common.timeLimit")} placeholder="600" min={1} defaultValue={600} required />
-            <Input name="max_attempts" type="number" label={t("common.maxAttempts")} placeholder="1" min={1} defaultValue={1} required />
-          </div>
-          <Button type="submit" variant="primary" size="lg">{t("common.createTest")}</Button>
-        </form>
-      </Card>
 
       {/* Tests List */}
       <Card variant="bordered" padding="none">
