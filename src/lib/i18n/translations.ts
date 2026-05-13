@@ -22,8 +22,8 @@ const uz: TranslationMap = {
 
   // Home
   "home.badge": "Dunyo bo'ylab 10,000+ talaba ishonadi",
-  "home.title1": "Testlaringizni o'zlashtirasiz,",
-  "home.title2": "Mukammallikka erishing",
+  "home.title1": "Bilimingizni sinang,",
+  "home.title2": "Muvaffaqiyatga erishing",
   "home.description":
     "Talabalar va ta'lim muassasalari uchun mo'ljallangan aqlli, ishonchli platforma. Testlarni ishonch bilan topshiring, rivojlanishingizni kuzating va maqsadlaringizga erishing.",
   "home.startFree": "Bepul boshlash",
@@ -528,8 +528,8 @@ const en: TranslationMap = {
   "nav.studentPanel": "Student Panel",
 
   "home.badge": "Trusted by 10,000+ students worldwide",
-  "home.title1": "Master Your Tests,",
-  "home.title2": "Achieve Excellence",
+  "home.title1": "Test Your Knowledge,",
+  "home.title2": "Achieve Success",
   "home.description":
     "Smart, reliable platform designed for students and educational institutions. Take tests with confidence, track your progress, and reach your goals.",
   "home.startFree": "Get Started Free",
@@ -1012,8 +1012,8 @@ const ru: TranslationMap = {
   "nav.studentPanel": "Панель студента",
 
   "home.badge": "Доверяют 10 000+ студентов по всему миру",
-  "home.title1": "Освойте тесты,",
-  "home.title2": "Достигните совершенства",
+  "home.title1": "Проверьте знания,",
+  "home.title2": "Достигните успеха",
   "home.description":
     "Умная, надёжная платформа для студентов и учебных заведений. Сдавайте тесты уверенно, отслеживайте прогресс и достигайте целей.",
   "home.startFree": "Начать бесплатно",
@@ -1494,8 +1494,8 @@ const fr: TranslationMap = {
   "nav.studentPanel": "Panneau étudiant",
 
   "home.badge": "Approuvé par plus de 10 000 étudiants dans le monde",
-  "home.title1": "Maîtrisez vos tests,",
-  "home.title2": "Atteignez l'Excellence",
+  "home.title1": "Testez vos connaissances,",
+  "home.title2": "Atteignez le succès",
   "home.description":
     "Plateforme intelligente et fiable conçue pour les étudiants et les établissements d'enseignement.",
   "home.startFree": "Commencer gratuitement",
