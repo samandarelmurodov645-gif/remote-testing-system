@@ -9,6 +9,7 @@ export const SUBJECTS = [
   "English",
   "Computer Science",
   "General",
+  "Ona tili",
 ] as const;
 
 export type Subject = (typeof SUBJECTS)[number];
@@ -24,6 +25,7 @@ export const SUBJECT_EMOJI: Record<string, string> = {
   English: "🇬🇧",
   "Computer Science": "💻",
   General: "📝",
+  "Ona tili": "🖊️",
 };
 
 export const SUBJECT_GRADIENT: Record<string, string> = {
@@ -37,4 +39,5 @@ export const SUBJECT_GRADIENT: Record<string, string> = {
   English: "from-sky-500 to-blue-600",
   "Computer Science": "from-slate-600 to-gray-700",
   General: "from-indigo-500 to-purple-600",
+  "Ona tili": "from-rose-500 to-pink-600",
 };

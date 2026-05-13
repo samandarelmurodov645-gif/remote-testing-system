@@ -381,6 +381,20 @@ const uz: TranslationMap = {
   "comp.runner.confirmSubmit": "Testni yakunlamoqchimisiz? Bu amal qaytarilmaydi.",
   "comp.runner.timeout": "Vaqt tugadi! Test avtomatik yakunlanmoqda...",
   "comp.runner.error": "Xatolik yuz berdi. Qaytadan urinib ko'ring.",
+  "comp.error.missingId": "Musobaqa ID si yo'q",
+  "comp.error.alreadyJoined": "Siz bu musobaqaga allaqachon qo'shilgansiz",
+  "comp.error.alreadyCompleted": "Siz bu testni allaqachon topshirgansiz. Faqat yangi ishtirokchilar qo'shila oladi.",
+  "comp.error.notStarted": "Musobaqa hali boshlanmagan",
+  "comp.error.ended": "Musobaqa tugagan",
+  "comp.error.full": "Musobaqada joy qolmagan",
+  "comp.error.missingData": "Kerakli ma'lumotlar yo'q",
+  "comp.error.notParticipant": "Siz ishtirokchi emassiz",
+  "comp.error.notFound": "Musobaqa topilmadi",
+  "comp.unknown": "Noma'lum",
+  "excel.comp.errorTitle": "Musobaqa nomi kiritilishi shart",
+  "excel.comp.errorStart": "Boshlanish sanasi va vaqti kiritilishi shart",
+  "excel.comp.errorEnd": "Tugash sanasi va vaqti kiritilishi shart",
+  "excel.comp.errorEndAfterStart": "Tugash vaqti boshlanish vaqtidan keyin bo'lishi kerak",
   // Login extended
   "login.welcome": "Xush kelibsiz",
   "login.register": "Ro'yxatdan o'tish",
@@ -500,6 +514,7 @@ const uz: TranslationMap = {
   "subject.English": "Ingliz tili",
   "subject.Computer Science": "Informatika",
   "subject.General": "Umumiy",
+  "subject.Ona tili": "Ona tili",
 };
 
 const en: TranslationMap = {
@@ -850,6 +865,20 @@ const en: TranslationMap = {
   "comp.runner.confirmSubmit": "Are you sure you want to submit? This cannot be undone.",
   "comp.runner.timeout": "Time's up! Test is being submitted automatically...",
   "comp.runner.error": "An error occurred. Please try again.",
+  "comp.error.missingId": "Competition ID is missing",
+  "comp.error.alreadyJoined": "Already joined this competition",
+  "comp.error.alreadyCompleted": "You have already completed this test. Only new participants can join.",
+  "comp.error.notStarted": "Competition hasn't started yet",
+  "comp.error.ended": "Competition has ended",
+  "comp.error.full": "Competition is full",
+  "comp.error.missingData": "Missing required data",
+  "comp.error.notParticipant": "Not a participant",
+  "comp.error.notFound": "Competition not found",
+  "comp.unknown": "Unknown",
+  "excel.comp.errorTitle": "Competition title is required",
+  "excel.comp.errorStart": "Start date/time is required",
+  "excel.comp.errorEnd": "End date/time is required",
+  "excel.comp.errorEndAfterStart": "End time must be after start time",
   // Login extended
   "login.welcome": "Welcome Back",
   "login.register": "Sign Up",
@@ -969,6 +998,7 @@ const en: TranslationMap = {
   "subject.English": "English",
   "subject.Computer Science": "Computer Science",
   "subject.General": "General",
+  "subject.Ona tili": "Native Language",
 };
 
 const ru: TranslationMap = {
@@ -1317,6 +1347,20 @@ const ru: TranslationMap = {
   "comp.runner.confirmSubmit": "Вы уверены, что хотите отправить? Это действие необратимо.",
   "comp.runner.timeout": "Время вышло! Тест отправляется автоматически...",
   "comp.runner.error": "Произошла ошибка. Попробуйте снова.",
+  "comp.error.missingId": "Идентификатор соревнования отсутствует",
+  "comp.error.alreadyJoined": "Вы уже участвуете в этом соревновании",
+  "comp.error.alreadyCompleted": "Вы уже проходили этот тест. Только новые участники могут присоединиться.",
+  "comp.error.notStarted": "Соревнование ещё не началось",
+  "comp.error.ended": "Соревнование завершено",
+  "comp.error.full": "Мест в соревновании больше нет",
+  "comp.error.missingData": "Отсутствуют необходимые данные",
+  "comp.error.notParticipant": "Вы не являетесь участником",
+  "comp.error.notFound": "Соревнование не найдено",
+  "comp.unknown": "Неизвестно",
+  "excel.comp.errorTitle": "Название соревнования обязательно",
+  "excel.comp.errorStart": "Дата и время начала обязательны",
+  "excel.comp.errorEnd": "Дата и время окончания обязательны",
+  "excel.comp.errorEndAfterStart": "Время окончания должно быть позже времени начала",
   // Login extended
   "login.welcome": "Добро пожаловать",
   "login.register": "Регистрация",
@@ -1436,6 +1480,7 @@ const ru: TranslationMap = {
   "subject.English": "Английский",
   "subject.Computer Science": "Информатика",
   "subject.General": "Общее",
+  "subject.Ona tili": "Родной язык",
 };
 
 const fr: TranslationMap = {
@@ -1790,6 +1835,20 @@ const fr: TranslationMap = {
   "comp.runner.confirmSubmit": "Êtes-vous sûr de vouloir soumettre? Cette action est irréversible.",
   "comp.runner.timeout": "Temps écoulé! Le test est soumis automatiquement...",
   "comp.runner.error": "Une erreur s'est produite. Veuillez réessayer.",
+  "comp.error.missingId": "L'identifiant de la compétition est manquant",
+  "comp.error.alreadyJoined": "Vous avez déjà rejoint cette compétition",
+  "comp.error.alreadyCompleted": "Vous avez déjà passé ce test. Seuls les nouveaux participants peuvent rejoindre.",
+  "comp.error.notStarted": "La compétition n'a pas encore commencé",
+  "comp.error.ended": "La compétition est terminée",
+  "comp.error.full": "La compétition est complète",
+  "comp.error.missingData": "Données requises manquantes",
+  "comp.error.notParticipant": "Vous n'êtes pas participant",
+  "comp.error.notFound": "Compétition introuvable",
+  "comp.unknown": "Inconnu",
+  "excel.comp.errorTitle": "Le titre de la compétition est requis",
+  "excel.comp.errorStart": "La date/heure de début est requise",
+  "excel.comp.errorEnd": "La date/heure de fin est requise",
+  "excel.comp.errorEndAfterStart": "L'heure de fin doit être après l'heure de début",
   // Login extended
   "login.welcome": "Bienvenue",
   "login.register": "S'inscrire",
@@ -1909,6 +1968,7 @@ const fr: TranslationMap = {
   "subject.English": "Anglais",
   "subject.Computer Science": "Informatique",
   "subject.General": "Général",
+  "subject.Ona tili": "Langue maternelle",
 };
 
 export const translations: Record<Lang, TranslationMap> = { uz, en, ru, fr };
