@@ -28,13 +28,13 @@ export function PageHeader({ title, description, actions }: PageHeaderProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="relative inline-block">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
               {title}
             </h1>
             <span className="absolute -bottom-1.5 left-0 w-10 h-1 rounded-full" style={{ background: "linear-gradient(90deg, #4338CA, #10B981)" }} />
           </div>
           {description && (
-            <p className="mt-4 text-slate-400 text-sm leading-relaxed max-w-xl">
+            <p className="mt-4 text-slate-500 text-sm leading-relaxed max-w-xl">
               {description}
             </p>
           )}

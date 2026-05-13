@@ -130,7 +130,7 @@ export function AdminGuide() {
                         {colHeaders.map((h, i) => (
                           <th
                             key={i}
-                            className={`border border-slate-200 px-2.5 py-2 text-left font-semibold whitespace-nowrap ${
+                            className={`border border-slate-200 px-2.5 py-2 text-left font-semibold min-w-[60px] ${
                               i === 6 ? "text-purple-700 bg-purple-50" : "text-slate-700"
                             }`}
                           >
