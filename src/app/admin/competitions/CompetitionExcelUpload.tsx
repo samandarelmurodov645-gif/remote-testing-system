@@ -153,11 +153,11 @@ export function CompetitionExcelUpload() {
 
   const handleCreate = async () => {
     if (!questions.length || creating) return;
-    if (!compTitle.trim()) { setError("Competition title is required"); return; }
-    if (!startTime) { setError("Start date/time is required"); return; }
-    if (!endTime) { setError("End date/time is required"); return; }
+    if (!compTitle.trim()) { setError(t("excel.comp.errorTitle")); return; }
+    if (!startTime) { setError(t("excel.comp.errorStart")); return; }
+    if (!endTime) { setError(t("excel.comp.errorEnd")); return; }
     if (new Date(endTime) <= new Date(startTime)) {
-      setError("End time must be after start time");
+      setError(t("excel.comp.errorEndAfterStart"));
       return;
     }
 

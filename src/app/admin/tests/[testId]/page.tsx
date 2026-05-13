@@ -14,6 +14,7 @@ import { ResetAttemptsButton } from "./ResetAttemptsButton";
 import { PageHeader } from "@/components/layout";
 import { Button, Input, Textarea, Card, Badge } from "@/components/ui";
 import { getServerT } from "@/lib/i18n";
+import { SUBJECTS, SUBJECT_EMOJI } from "@/lib/subjects";
 
 export default async function AdminTestDetailPage({
   params,
@@ -29,7 +30,7 @@ export default async function AdminTestDetailPage({
 
   const { data: test } = await supabase
     .from("tests")
-    .select("id,title,description,time_limit_seconds,max_attempts,published")
+    .select("id,title,description,time_limit_seconds,max_attempts,published,subject")
     .eq("id", testId)
     .maybeSingle();
 
@@ -132,6 +133,22 @@ export default async function AdminTestDetailPage({
           <div className="grid md:grid-cols-2 gap-4">
             <Input name="time_limit_seconds" type="number" label={t("common.timeLimit")} min={1} defaultValue={test.time_limit_seconds} required />
             <Input name="max_attempts" type="number" label={t("common.maxAttempts")} min={1} defaultValue={test.max_attempts} required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              {t("subject.label")}
+            </label>
+            <select
+              name="subject"
+              defaultValue={test.subject ?? "General"}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all bg-white text-slate-900"
+            >
+              {SUBJECTS.map((s) => (
+                <option key={s} value={s}>
+                  {SUBJECT_EMOJI[s]} {t(`subject.${s}`)}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
             <input id="published" name="published" type="checkbox" defaultChecked={test.published}

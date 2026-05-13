@@ -57,6 +57,7 @@ const updateTestSchema = z.object({
   time_limit_seconds: z.coerce.number().int().positive(),
   max_attempts: z.coerce.number().int().min(1),
   published: z.coerce.boolean(),
+  subject: z.string().min(1).default("General"),
 });
 
 export async function updateTestAction(formData: FormData) {
@@ -69,6 +70,7 @@ export async function updateTestAction(formData: FormData) {
     time_limit_seconds: formData.get("time_limit_seconds"),
     max_attempts: formData.get("max_attempts"),
     published: formData.get("published") === "on",
+    subject: (formData.get("subject") as string | null) ?? "General",
   });
 
   if (!parsed.success) {
@@ -84,6 +86,7 @@ export async function updateTestAction(formData: FormData) {
       time_limit_seconds: parsed.data.time_limit_seconds,
       max_attempts: parsed.data.max_attempts,
       published: parsed.data.published,
+      subject: parsed.data.subject,
     })
     .eq("id", parsed.data.test_id);
 
