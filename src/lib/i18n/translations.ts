@@ -515,6 +515,32 @@ const uz: TranslationMap = {
   "subject.Computer Science": "Informatika",
   "subject.General": "Umumiy",
   "subject.Ona tili": "Ona tili",
+
+  // Theme toggle
+  "theme.dark": "Qorong'u rejim",
+  "theme.light": "Yorug' rejim",
+
+  // Motivational quotes
+  "quote.1.text": "Tasavvur bilimdan muhimroq.",
+  "quote.1.author": "Albert Eynshteyn",
+  "quote.2.text": "Ta'lim — dunyoni o'zgartirish uchun eng kuchli qurol.",
+  "quote.2.author": "Nelson Mandela",
+  "quote.3.text": "Ta'limning ildizi achchiq, lekin mevasи shirin.",
+  "quote.3.author": "Arastu",
+  "quote.4.text": "Bilimga qilingan sarmoya eng yuqori foiz keltiradi.",
+  "quote.4.author": "Benjamin Franklin",
+  "quote.5.text": "Erta o'lasan deb yasha, abadiy yashaydigan deb o'rgan.",
+  "quote.5.author": "Mahatma Gandi",
+  "quote.6.text": "Muvaffaqiyat yakuniy emas, muvaffaqiyatsizlik halokatli emas: davom etish jasorati muhim.",
+  "quote.6.author": "Uilyam Cherchill",
+  "quote.7.text": "Ta'lim — kelajakka pasport.",
+  "quote.7.author": "Malcolm X",
+  "quote.8.text": "Hayotda qo'rqadigan narsa yo'q, faqat tushunish lozim.",
+  "quote.8.author": "Mariya Kyuri",
+  "quote.9.text": "Qanchalik sekin bo'lmang, to'xtamasligingiz muhim.",
+  "quote.9.author": "Konfutsiy",
+  "quote.10.text": "Ta'lim bo'sh idishni to'ldirish emas, balki olovni yoqishdir.",
+  "quote.10.author": "Uilyam Batler Yeyts",
 };
 
 const en: TranslationMap = {
@@ -999,6 +1025,32 @@ const en: TranslationMap = {
   "subject.Computer Science": "Computer Science",
   "subject.General": "General",
   "subject.Ona tili": "Native Language",
+
+  // Theme toggle
+  "theme.dark": "Dark Mode",
+  "theme.light": "Light Mode",
+
+  // Motivational quotes
+  "quote.1.text": "Imagination is more important than knowledge.",
+  "quote.1.author": "Albert Einstein",
+  "quote.2.text": "Education is the most powerful weapon you can use to change the world.",
+  "quote.2.author": "Nelson Mandela",
+  "quote.3.text": "The roots of education are bitter, but the fruit is sweet.",
+  "quote.3.author": "Aristotle",
+  "quote.4.text": "An investment in knowledge pays the best interest.",
+  "quote.4.author": "Benjamin Franklin",
+  "quote.5.text": "Live as if you were to die tomorrow. Learn as if you were to live forever.",
+  "quote.5.author": "Mahatma Gandhi",
+  "quote.6.text": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+  "quote.6.author": "Winston Churchill",
+  "quote.7.text": "Education is the passport to the future.",
+  "quote.7.author": "Malcolm X",
+  "quote.8.text": "Nothing in life is to be feared, it is only to be understood.",
+  "quote.8.author": "Marie Curie",
+  "quote.9.text": "It does not matter how slowly you go as long as you do not stop.",
+  "quote.9.author": "Confucius",
+  "quote.10.text": "Education is not the filling of a pail, but the lighting of a fire.",
+  "quote.10.author": "William Butler Yeats",
 };
 
 const ru: TranslationMap = {
@@ -1481,6 +1533,32 @@ const ru: TranslationMap = {
   "subject.Computer Science": "Информатика",
   "subject.General": "Общее",
   "subject.Ona tili": "Родной язык",
+
+  // Theme toggle
+  "theme.dark": "Тёмная тема",
+  "theme.light": "Светлая тема",
+
+  // Motivational quotes
+  "quote.1.text": "Воображение важнее знания.",
+  "quote.1.author": "Альберт Эйнштейн",
+  "quote.2.text": "Образование — самое мощное оружие для изменения мира.",
+  "quote.2.author": "Нельсон Мандела",
+  "quote.3.text": "Корни учения горьки, но плоды его сладки.",
+  "quote.3.author": "Аристотель",
+  "quote.4.text": "Вложения в знания приносят наибольшую прибыль.",
+  "quote.4.author": "Бенджамин Франклин",
+  "quote.5.text": "Живи так, будто умрёшь завтра. Учись так, будто будешь жить вечно.",
+  "quote.5.author": "Махатма Ганди",
+  "quote.6.text": "Успех не окончателен, неудача не смертельна: важна лишь смелость продолжать.",
+  "quote.6.author": "Уинстон Черчилль",
+  "quote.7.text": "Образование — это паспорт в будущее.",
+  "quote.7.author": "Малколм Икс",
+  "quote.8.text": "Ничто в жизни не следует бояться — нужно лишь понять.",
+  "quote.8.author": "Мария Кюри",
+  "quote.9.text": "Неважно, насколько медленно ты движешься, — главное, не останавливаться.",
+  "quote.9.author": "Конфуций",
+  "quote.10.text": "Образование — не наполнение ведра, а разжигание огня.",
+  "quote.10.author": "Уильям Батлер Йейтс",
 };
 
 const fr: TranslationMap = {
@@ -1969,6 +2047,32 @@ const fr: TranslationMap = {
   "subject.Computer Science": "Informatique",
   "subject.General": "Général",
   "subject.Ona tili": "Langue maternelle",
+
+  // Theme toggle
+  "theme.dark": "Mode sombre",
+  "theme.light": "Mode clair",
+
+  // Motivational quotes
+  "quote.1.text": "L'imagination est plus importante que le savoir.",
+  "quote.1.author": "Albert Einstein",
+  "quote.2.text": "L'éducation est l'arme la plus puissante pour changer le monde.",
+  "quote.2.author": "Nelson Mandela",
+  "quote.3.text": "Les racines de l'éducation sont amères, mais ses fruits sont doux.",
+  "quote.3.author": "Aristote",
+  "quote.4.text": "Un investissement dans la connaissance rapporte le meilleur intérêt.",
+  "quote.4.author": "Benjamin Franklin",
+  "quote.5.text": "Vis comme si tu devais mourir demain. Apprends comme si tu devais vivre éternellement.",
+  "quote.5.author": "Mahatma Gandhi",
+  "quote.6.text": "Le succès n'est pas final, l'échec n'est pas fatal : c'est le courage de continuer qui compte.",
+  "quote.6.author": "Winston Churchill",
+  "quote.7.text": "L'éducation est le passeport vers l'avenir.",
+  "quote.7.author": "Malcolm X",
+  "quote.8.text": "Rien dans la vie n'est à craindre, tout est à comprendre.",
+  "quote.8.author": "Marie Curie",
+  "quote.9.text": "Peu importe la lenteur, l'essentiel est de ne pas s'arrêter.",
+  "quote.9.author": "Confucius",
+  "quote.10.text": "L'éducation n'est pas le remplissage d'un seau, mais l'allumage d'un feu.",
+  "quote.10.author": "William Butler Yeats",
 };
 
 export const translations: Record<Lang, TranslationMap> = { uz, en, ru, fr };

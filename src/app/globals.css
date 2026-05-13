@@ -511,6 +511,83 @@ a, button {
   animation: fade-in-up 0.55s ease-out forwards;
 }
 
+/* ─── Dark mode ─────────────────────────────────────────── */
+
+html.dark {
+  --background: #1A1A2E;
+  --background-subtle: #16213E;
+  --foreground: #F1F5F9;
+  --text-primary: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
+}
+
+html.dark body {
+  background: #1A1A2E;
+  color: #F1F5F9;
+}
+
+/* Surface overrides */
+html.dark .bg-white        { background-color: #16213E !important; }
+html.dark .bg-slate-50     { background-color: #1A2444 !important; }
+html.dark .bg-slate-100    { background-color: #1E2A50 !important; }
+
+/* Text overrides */
+html.dark .text-slate-900  { color: #F1F5F9 !important; }
+html.dark .text-slate-800  { color: #E2E8F0 !important; }
+html.dark .text-slate-700  { color: #CBD5E1 !important; }
+html.dark .text-slate-600  { color: #94A3B8 !important; }
+html.dark .text-slate-500  { color: #64748B !important; }
+html.dark .text-slate-400  { color: #475569 !important; }
+
+/* Border overrides */
+html.dark .border-slate-200 { border-color: rgba(148,163,184,0.15) !important; }
+html.dark .border-slate-100 { border-color: rgba(148,163,184,0.08) !important; }
+html.dark .divide-slate-200 > * + * { border-color: rgba(148,163,184,0.15) !important; }
+
+/* Sidebar active in dark */
+html.dark .sidebar-active {
+  background: linear-gradient(135deg, rgba(67,56,202,0.22), rgba(16,185,129,0.14)) !important;
+}
+
+/* Input overrides */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color: #F1F5F9;
+  background-color: #1E2A50;
+  border-color: rgba(148,163,184,0.2);
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder { color: #475569; }
+
+/* Shadow overrides */
+html.dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.4) !important; }
+
+/* Glass in dark */
+html.dark .glass {
+  background: rgba(22,33,62,0.85) !important;
+  border-color: rgba(99,102,241,0.18) !important;
+}
+
+/* Skeleton in dark */
+html.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 75%
+  ) !important;
+}
+
+/* ─── Theme switch transition ────────────────────────────── */
+
+html[data-theme-switching] *,
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
 /* ─── Prefers reduced motion ─────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

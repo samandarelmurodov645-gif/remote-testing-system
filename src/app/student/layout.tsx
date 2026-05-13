@@ -52,7 +52,7 @@ export default async function StudentLayout({
   await requireRole("student");
 
   return (
-    <div className="min-h-screen" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen" style={{ background: "var(--background)" }}>
       <AppSidebar
         role="student"
         navItems={studentNavItems}

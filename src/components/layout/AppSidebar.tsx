@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NProgress from "nprogress";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "@/components/ui/Logo";
 
@@ -27,6 +28,8 @@ export function AppSidebar({
   logoLabel,
 }: AppSidebarProps) {
   const { t } = useLanguage();
+  const { theme, toggle } = useTheme();
+  const isDark = theme === "dark";
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -64,9 +67,9 @@ export function AppSidebar({
           lg:translate-x-0
         `}
         style={{
-          background: "#FFFFFF",
-          borderRight: "1px solid rgba(0,0,0,0.06)",
-          boxShadow: "2px 0 20px rgba(0,0,0,0.06)",
+          background: isDark ? "#0F172A" : "#FFFFFF",
+          borderRight: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.06)",
+          boxShadow: isDark ? "2px 0 20px rgba(0,0,0,0.4)" : "2px 0 20px rgba(0,0,0,0.06)",
         }}
       >
         {/* Top accent bar — indigo → emerald */}
@@ -80,7 +83,7 @@ export function AppSidebar({
         />
 
         {/* Logo */}
-        <div className="px-5 py-5 shrink-0" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="px-5 py-5 shrink-0" style={{ borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.06)" }}>
           <Link
             href={logoHref}
             className="flex items-center gap-3 group"
@@ -89,7 +92,7 @@ export function AppSidebar({
             <div className="transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(67,56,202,0.4)]">
               <Logo size={36} />
             </div>
-            <span className="text-slate-800 font-bold text-lg tracking-tight">{logoLabel}</span>
+            <span className={`font-bold text-lg tracking-tight ${isDark ? "text-slate-100" : "text-slate-800"}`}>{logoLabel}</span>
           </Link>
         </div>
 
@@ -140,9 +143,27 @@ export function AppSidebar({
         </nav>
 
         {/* Bottom: Language + Logout */}
-        <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="p-3 shrink-0" style={{ borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.06)" }}>
           <div className="space-y-1">
             <LanguageSwitcher variant="light" />
+            <button
+              onClick={toggle}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all"
+              aria-label={t(isDark ? "theme.light" : "theme.dark")}
+            >
+              {isDark ? (
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+              {t(isDark ? "theme.light" : "theme.dark")}
+            </button>
             <form action="/logout" method="post">
               <button
                 type="submit"

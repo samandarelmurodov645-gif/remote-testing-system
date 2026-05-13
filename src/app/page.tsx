@@ -4,6 +4,7 @@ import { Button } from "@/components/ui";
 import { Logo } from "@/components/ui/Logo";
 import { getServerT } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { QuotesCarousel } from "@/components/QuotesCarousel";
 
 const SYMBOLS = [
   { s: "∑",      l: "7%",  t: "72%", delay: "0s",    dur: "14s", fs: "1.9rem", op: 0.08 },
@@ -38,7 +39,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: "var(--background)" }}>
 
       {/* Soft gradient orbs */}
       <div className="absolute inset-0 pointer-events-none" style={{
@@ -146,6 +147,9 @@ export default async function Home() {
                   </Button>
                 </div>
               </div>
+
+              {/* Motivational quotes carousel */}
+              <QuotesCarousel />
 
               {/* Stats bar */}
               <div className="bg-white rounded-2xl px-8 py-6 mb-16 border border-slate-200 shadow-sm animate-fade-in-up delay-400">
