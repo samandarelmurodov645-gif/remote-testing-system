@@ -39,7 +39,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen flex" style={{ background: "var(--background)" }}>
 
       {/* ── Left: branded panel — indigo → dark emerald ── */}
       <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col">
